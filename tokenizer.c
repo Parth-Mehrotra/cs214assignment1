@@ -70,8 +70,6 @@ char *TKGetNextToken( TokenizerT * tk ) {
  */
 
 int main(int argc, char **argv) {
-	printf("%s\n", argv[1]);
-	int len = strlen(argv[1]);
-	printf("%d\n", len);
+	if(argc != 2){printf("bad input\n");
 	return 0;
 }

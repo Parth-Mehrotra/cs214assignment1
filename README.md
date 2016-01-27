@@ -1,28 +1,61 @@
-# Word Cases
+# Character Read Flow:
 
 ## First character is alphabetic (a-z)
-Delimeters:
 
-* Anything that's not alphanumeric
+*Word case*
 
 ## First character is a non-zero numeric character (1-9)
-Delimeters:
 
-* Anything that's not numeric
-* A period is a *special special* character - it may indicate a floating point number.
-	* If the character that follows the period is non-numeric, then it's a decimal
+* Assume *Decimal case*.
 	
 ## First character is zero
+
 Maybe decimal, octal, float or hexadecimal.
+*Zero case*
 
-Delimeters: 
+## First character is a special character
 
-* Depends on the character after 0.
-	* if it's anything that's non-numeric, not the letter x, the number `0`, or not a period. Then it is the decimal number `0`
-	* if it's a number less than 8, it's octal.
-		* then anything non-numeric or greater than 7 ends the token.
-	* if it's the letter x
-		* and then the following character is 0-9 || a-f, then it's hexadecimal.
-			* continue until, you reach a non-alphanumeric, or letters greater than f.
-		* If it's alphabetic, *not* a-f then it's decimal 0 + the word case.
-		* special character decimal 0 + word x + special character.
+//TODO
+*Special Character case*
+
+# CASE LIST
+
+## Word Case
+
+* Upon reaching anything that's not alphanumeric, *END*.
+
+## Decimal Case
+
+* if reaches anything that's not numeric, *END*
+* if reaches a period: 
+	* If the character that follows the period is non-numeric, then it's a *END* + *Special Character 'period'*
+	* Otherwise, it is *Float case*.
+
+## Float Case
+
+* 
+
+## Zero Case
+
+* Look at the character after 0.
+	* if it's anything that's non-numeric, not the letter x, the number `0`, or not a period. Then it is the *Decimal `0`*
+	* if it's a number less than 8, *Octal case*.
+	* if it's the letter x, *X case*
+
+## X Case
+
+* If then the following character is 0-9 || a-f, then *Hex case*.
+		* If it's alphabetic and NOT a-f then it's *Decimal '0'* + *Word case*.
+		* If special character, *Decimal '0'* + *Word case 'x'* + *Special Character case*.
+	
+## Octal Case
+
+* If anything non-numeric or greater than 7, *END*.
+
+## Hex Case
+
+* If anything non-alphanumeric or letters greater than f, *END*.
+	
+## Special Character Case
+
+* 

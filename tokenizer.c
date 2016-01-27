@@ -7,13 +7,18 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*
- * Tokenizer type.  You need to fill in the type as part of your implementation.
- */
+struct Token_ {
+	char* token;
+	char* type;
+	Token* next;
+}
+typedef struct Token_ Token;
 
 struct TokenizerT_ {
+	char* input;
+	Token* head;
+	Token* current;
 };
-
 typedef struct TokenizerT_ TokenizerT;
 
 /*
@@ -21,7 +26,7 @@ typedef struct TokenizerT_ TokenizerT;
  * (given as a string).
  * 
  * TKCreate should copy the arguments so that it is not dependent on
- * them staying immutable after returning.  (In the future, this may change
+ * them staying immutable after returning.	(In the future, this may change
  * to increase efficiency.)
  *
  * If the function succeeds, it returns a non-NULL TokenizerT.
@@ -30,13 +35,13 @@ typedef struct TokenizerT_ TokenizerT;
  * You need to fill in this function as part of your implementation.
  */
 
-TokenizerT *TKCreate( char * ts ) {
-
-  return NULL;
+TokenizerT* TKCreate(char* inputString) {
+	
+	return NULL;
 }
 
 /*
- * TKDestroy destroys a TokenizerT object.  It should free all dynamically
+ * TKDestroy destroys a TokenizerT object.	It should free all dynamically
  * allocated memory that is part of the object being destroyed.
  *
  * You need to fill in this function as part of your implementation.
@@ -47,19 +52,19 @@ void TKDestroy( TokenizerT * tk ) {
 
 /*
  * TKGetNextToken returns the next token from the token stream as a
- * character string.  Space for the returned token should be dynamically
- * allocated.  The caller is responsible for freeing the space once it is
+ * character string.	Space for the returned token should be dynamically
+ * allocated.	The caller is responsible for freeing the space once it is
  * no longer needed.
  *
  * If the function succeeds, it returns a C string (delimited by '\0')
- * containing the token.  Else it returns 0.
+ * containing the token.	Else it returns 0.
  *
  * You need to fill in this function as part of your implementation.
  */
 
 char *TKGetNextToken( TokenizerT * tk ) {
 
-  return NULL;
+	return NULL;
 }
 
 /*

@@ -45,8 +45,8 @@ Maybe decimal, octal, float or hexadecimal.
 ## X Case
 
 * If then the following character is 0-9 || a-f, then *Hex case*.
-		* If it's alphabetic and NOT a-f then it's *Decimal '0'* + *Word case*.
-		* If special character, *Decimal '0'* + *Word case 'x'* + *Special Character case*.
+	* If it's alphabetic and NOT a-f then it's *Decimal '0'* + *Word case*.
+	* If special character, *Decimal '0'* + *Word case 'x'* + *Special Character case*.
 	
 ## Octal Case
 

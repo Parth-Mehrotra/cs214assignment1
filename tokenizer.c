@@ -1,5 +1,6 @@
 /*
- * @author Parth
+ * @author Wael Ayadi, Parth Mehrotra
+ *
  * tokenizer.c
  */
 #include <stdio.h>

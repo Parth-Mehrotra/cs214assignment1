@@ -49,7 +49,7 @@ EX: "12354" is a decimal.
 
 ## Period Case
 
-NOTE: Period case is not a Token. It is either part of *Float case* or *Special Character case*/
+NOTE: Period case is not a Token. It is either part of *Float case* or *Special Character case* 
 EX: "." is period case. "-." is also period case.
 * Check following character:
 	* if it is a numeric, *Float case*
@@ -57,7 +57,7 @@ EX: "." is period case. "-." is also period case.
 
 ## Minus Case
 
-NOTE: Minus case is not a Token. It is either a *Decimal*, *Float*, or *Special Character*
+NOTE: Minus case is not a Token. It is either a *Decimal*, *Float*, or *Special Character* 
 EX: "-" is minus case.
 * Check the following character:
 	* if it is numeric, *Decimal case*.
@@ -77,11 +77,11 @@ EX: "3.14" is one float.
 
 ## Zero Case
 
-NOTE: Zero Case is not a Token.
+NOTE: Zero Case is not a Token. 
 EX: "0" is zero case.
 * Look at the character after 0.
-	* if it's anything that's non-numeric, not the letter x, the number `0`, or not a period. Then it is the *Decimal `0`*
-	  EX: "0ABC" is *Decimal 0* + *Word ABC*
+	* if it's anything that's non-numeric, not the letter x, the number `0`, or not a period. Then it is the *Decimal `0`* 
+	EX: "0ABC" is *Decimal 0* + *Word ABC*
 	* if it's a number less than 8, *Octal case*.
 	* if it's the letter x, *X case*
 	* if it's a period, check the following character:
@@ -90,7 +90,7 @@ EX: "0" is zero case.
 
 ## X Case
 
-NOTE: X Case is not a Token.
+NOTE: X Case is not a Token. 
 EX: "0x" is X case.
 * If then the following character is 0-9 || a-f, then *Hex case*.
 	* If it's alphabetic and NOT a-f then it's *Decimal '0'* + *Word case*.

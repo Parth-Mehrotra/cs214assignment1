@@ -62,6 +62,7 @@ EX: "-" is minus case.
 * Check the following character:
 	* if it is numeric, *Decimal case*.
 	* if it is a period, *Period case*.
+	* if it is a '>', then *Special Character "Structure Pointer"*
 
 ## Float Case
 
@@ -110,4 +111,58 @@ EX: "0x45AF" is Hex case.
 	
 ## Special Character Case
 
-* 
+List of Special characters:
+* '(' Left Parenthesis
+* ')' Right Parenthesis
+* '[' Left Bracket
+* ']' Right Bracket
+* '.' Period or Structure Member
+* '->' Structure Pointer
+* '*' Asterisk or Multiply or D Reference
+* '&' Ampersand or Address or Bitwise AND
+* '-' Dash or Minus sign
+* '!' Negate or Exclamation Point
+* '~' One's Complement or Tilda
+* '++' Increment
+* '--' Decrement
+* '/' Divide or Forward Slash
+* '%' Modulus or Percent Symbol
+* '+' Add
+* '-' Subtract
+* '>>' Shift right
+* '<<' Shift left
+* '<' Less than
+* '>' Greater than
+* '<=' Less or equal
+* '>=' Greater or equal
+* '=' Equal
+* '==' Equals
+* '!=' Not equals
+* '^' Bitwise Exclusive OR
+* '|' Bitwise OR
+* '&&' Logical AND
+* '||' Logical OR
+* '?' Exclamation Point
+* '+=" PlusEquals
+* '-=' MinusEquals
+* '*=' TimesEquals
+* '/=' DivideEquals
+* '%=' ModuloEquals
+* '>>=' RightShiftEquals
+* '<<=' LeftShiftEquals
+* '&=' BinaryANDEquals
+* '^=' BinaryExclusiveOREquals
+* '|=' BinaryOREquals
+* ',' Comma
+* '`' Grave Accent
+* '@' At
+* '#' Hashtag or Pound
+* '$' Dollar Sign
+* '_' Underscore
+* '{' Left Curly Bracket
+* '}' Right Curly Bracket
+* '\' Back Slash
+* ':' Colon
+* ';' Semicolon
+* ''' Single Quotation Mark
+* '"' Double Quotation Mark

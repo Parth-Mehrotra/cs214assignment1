@@ -43,7 +43,7 @@ EX: "ABC123" is one word.
 EX: "12354" is a decimal.
 * if reaches anything that's not numeric, *END*
 * if reaches a period: 
-	* If the character that follows the period is non-numeric, then it's a *END* + *Special Character 'period'* 
+	* If the character that follows the period is non-numeric, then it's a *END* + *Special Character 'period'*\n 
 	  EX: "456." is *Decimal 456* + *Special Character '.'*
 	* Otherwise, it is *Float case*.
 

@@ -29,7 +29,7 @@ Maybe negative decimal, negative float, or Special character '-'
 
 ## First character is a special character (excluding '.' and '-')
 
-*Special Character case*
+* *Special Character case*
 
 # CASE LIST
 

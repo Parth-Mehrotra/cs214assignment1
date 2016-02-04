@@ -1,3 +1,5 @@
+Code needs to detect comments and single & double quotes
+
 # Character Read Flow:
 
 ## First character is alphabetic (a-z)
@@ -166,3 +168,37 @@ List of Special characters:
 * ';' Semicolon
 * ''' Single Quotation Mark
 * '"' Double Quotation Mark
+
+## List of C Keywords
+auto
+break
+case
+char
+const
+continue
+default
+do
+double
+else
+enum
+extern
+float
+for
+goto
+if
+int
+long
+register
+return
+short
+signed
+sizeof
+static
+struct
+switch
+typedef
+union
+unsigned
+void
+volatile
+while

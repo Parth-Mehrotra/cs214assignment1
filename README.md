@@ -1,4 +1,3 @@
-Code needs to detect comments and single & double quotes
 
 # Character Read Flow:
 
@@ -17,6 +16,7 @@ Maybe decimal, octal, float or hexadecimal.
 
 ## First character is a whitespace character
 
+Space (' '), tab ('\t'), vertical tab ('\v'), form feed ('\f'), newline ('\n') and carriage return ('\r').
 * Ignore this character. Skip to the next character.
 
 ## First character is a period
@@ -32,6 +32,10 @@ Maybe negative decimal, negative float, or Special character '-'
 ## First character is a special character (excluding '.' and '-')
 
 * *Special Character case*
+
+## If anything else
+
+* *Bad Token case*
 
 # CASE LIST
 
@@ -73,7 +77,7 @@ EX: "3.14" is one float.
 	* if it is not the letter e, *END*
 	* else, check the following character
 		* if it is non-numeric or not '-', *END* + continue with character e.
-		* if it is '-', check the next character
+		* if it is '-' or '+', check the next character
 			* if it is not numeric, *END* + continue with character e.
 			* else, continue until hitting something non-numeric
 		* if it is numeric, continue until hitting something non-numeric.
@@ -110,51 +114,77 @@ NOTE: There is no octal quantity "0" with this implementation. "00" = *Decimal '
 
 EX: "0x45AF" is Hex case.
 * If anything non-alphanumeric or letters greater than f, *END*.
+
+## Comment Case
+
+EX: "//1234" is Comment Case. "/*1234" is also Comment case.
+* if comment started with '//', skip all following characters until a '\n' is reached.
+* if comment started with '/*', skip all following characters until a '*/' is reached.
+
+## Quote Case
+
+EX: "ABCD"1n89YS&hd1u2b8dg8"123" has a Quote case in it
+* if started with a single quote, all following characters until a single quote is reached. Call the token a string.
+* if started with a double quote, all following characters until a double quote is reached. Call the token a string.
 	
 ## Special Character Case
+
+List of *Special* Special characters:
+* '/' Forward Slash  
+ This depends on the following character:
+* if '=', then '/=' DivideEquals
+* if '/', then *Comment case*
+* if Asterisk, then *Comment case*
+* else, Forward slash
+
+* '\' Back Slash
+This depends on the following character:
+* is whitespace if the following character is a 't', 'v', 'f', 'n', 'r'
+* else, Back Slash
+
+* ''' Single Quotation Mark
+* '"' Double Quotation Mark
+* if either of these, *Quote case*
 
 List of Special characters:
 * '(' Left Parenthesis
 * ')' Right Parenthesis
 * '[' Left Bracket
 * ']' Right Bracket
-* '.' Period or Structure Member
+* '.' Period
 * '->' Structure Pointer
-* '*' Asterisk or Multiply or D Reference
-* '&' Ampersand or Address or Bitwise AND
-* '-' Dash or Minus sign
+* '*' Asterisk
+* '*=' TimesEquals
+* '&' Ampersand
+* '&&' Logical AND
+* '&=' BinaryANDEquals
 * '!' Negate or Exclamation Point
 * '~' One's Complement or Tilda
+* '+' Plus
 * '++' Increment
+* '+=" PlusEquals
+* '-' Dash
 * '--' Decrement
-* '/' Divide or Forward Slash
-* '%' Modulus or Percent Symbol
-* '+' Add
-* '-' Subtract
-* '>>' Shift right
-* '<<' Shift left
-* '<' Less than
+* '-=' MinusEquals
+* '%' Percent
+* '%=' ModuloEquals
 * '>' Greater than
-* '<=' Less or equal
+* '>>' Shift right
+* '>>=' RightShiftEquals
 * '>=' Greater or equal
+* '<' Less than
+* '<<' Shift left
+* '<<=' LeftShiftEquals
+* '<=' Less or equal
 * '=' Equal
 * '==' Equals
 * '!=' Not equals
 * '^' Bitwise Exclusive OR
-* '|' Bitwise OR
-* '&&' Logical AND
-* '||' Logical OR
-* '?' Exclamation Point
-* '+=" PlusEquals
-* '-=' MinusEquals
-* '*=' TimesEquals
-* '/=' DivideEquals
-* '%=' ModuloEquals
-* '>>=' RightShiftEquals
-* '<<=' LeftShiftEquals
-* '&=' BinaryANDEquals
 * '^=' BinaryExclusiveOREquals
+* '|' Bitwise OR
+* '||' Logical OR
 * '|=' BinaryOREquals
+* '?' Question Mark
 * ',' Comma
 * '`' Grave Accent
 * '@' At
@@ -166,10 +196,12 @@ List of Special characters:
 * '\' Back Slash
 * ':' Colon
 * ';' Semicolon
-* ''' Single Quotation Mark
-* '"' Double Quotation Mark
 
-## List of C Keywords
+## Bad Token Case
+
+* If the ASCII character is unrecognized, *Bad Token*
+
+# List of C Keywords
 auto
 break
 case

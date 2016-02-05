@@ -6,11 +6,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-global char* inputString;
+#include <ctype.h>
 
 struct Token_ {
-	char* token;
+	char* string;
 	char* type;
 	struct Token_* next;
 };
@@ -24,47 +23,109 @@ struct TokenizerT_ {
 typedef struct TokenizerT_ TokenizerT;
 
 // Token Constuctor
-Token* newToken(char* input) {
+Token* newToken(char* input, char* type) {
 	Token* token = (Token*) malloc(sizeof(Token));
-	// TODO figure out type and all that
+	token->string = input;
+	token->type = type;
+	token->next = NULL;
 	return token;
+}
+
+// List of case functions:
+Token* wordCase(char* currentString){
+	int i = 0;
+	while(isalnum(*(currentString + i)))
+	{
+		i++;
+	}
+	char* temp = (char*) calloc((i+1), sizeof(char));
+	temp = strncpy(temp, currentString, i);
+	return newToken(temp, "word");
+}
+
+Token* decimalCase(char* currentString){
+	
+}
+
+Token* periodCase(char* currentString){
+	
+}
+
+Token* minusCase(char* currentString){
+	
+}
+
+Token* floatCase(char* currentString){
+	
+}
+
+Token* zeroCase(char* currentString){
+	
+}
+
+Token* xCase(char* currentString){
+	
+}
+
+Token* octalCase(char* currentString){
+	
+}
+
+Token* hexCase(char* currentString){
+	
+}
+
+void commentCase(char* currentString){
+	
+}
+
+Token* quoteCase(char* currentString){
+	
+}
+
+Token* specialCase(char* currentString){
+	
+}
+
+Token* badTokenCase(char* currentString){
+	
 }
 
 /*
  * Takes the first character of the input string and determines which of the initial cases it belongs to.
  * Then, it calls the corresponding function of that case.
  */
-void getInit(char* string) {
+Token* getInit(char* string) {
 
 	// For example, a == 'T'. Calls wordCase().
 	char a = *string;
 	if(isalpha(a))
 	{
-		wordCase();
+		return wordCase(string);
 	}
 	else if(a == '0')
 	{
-		zeroCase();
+		return zeroCase(string);
 	}
 	else if(isdigit(a))
 	{
-		decimalCase();
+		return decimalCase(string);
 	}
 	else if(isspace(a))
 	{
-		return;
+		return NULL;
 	}
 	else if(a == '.')
 	{
-		periodCase();
+		return periodCase(string);
 	}
 	else if(a == '-')
 	{
-		minusCase();
+		return minusCase(string);
 	}
 	else
 	{
-		specialCase();
+		return specialCase(string);
 	}
 }
 
@@ -90,7 +151,10 @@ TokenizerT* TKCreate(char* inputString) {
 	char* currentStr = (char*) calloc(strlen(inputString), sizeof(char));	
 	strcpy(currentStr, inputString);
 
-	getInit(currentStr);
+	Token* temp = getInit(currentStr);
+	if(tokenizer->head == NULL)
+		tokenizer->head = temp;
+	tokenizer->current = temp;
 
 	return tokenizer;
 }
@@ -105,58 +169,7 @@ void TKDestroy( TokenizerT * tk ) {
 }
 
 
-// List of case functions:
-Token* wordCase(){
-	
-}
 
-Token* decimalCase(){
-	
-}
-
-Token* periodCase(){
-	
-}
-
-Token* minusCase(){
-	
-}
-
-Token* floatCase(){
-	
-}
-
-Token* zeroCase(){
-	
-}
-
-Token* xCase(){
-	
-}
-
-Token* octalCase(){
-	
-}
-
-Token* hexCase(){
-	
-}
-
-void commentCase(){
-	
-}
-
-Token* quoteCase(){
-	
-}
-
-Token* specialCase(){
-	
-}
-
-Token* badTokenCase(){
-	
-}
 
 /*
  * TKGetNextToken returns the next token from the token stream as a
@@ -184,9 +197,9 @@ char *TKGetNextToken( TokenizerT * tk ) {
  */
 
 int main(int argc, char **argv) {
-	if(argc != 2){printf("bad input\n");
-	TokenizerT tokenizer = TKCreate(argv[1]);
-
+	if(argc != 2){printf("bad input\n");}
+	TokenizerT* tokenizer = TKCreate(argv[1]);
+	
 	
 	return 0;
 }

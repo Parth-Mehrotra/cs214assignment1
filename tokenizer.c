@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+global char* inputString;
+
 struct Token_ {
 	char* token;
 	char* type;
@@ -21,14 +23,11 @@ struct TokenizerT_ {
 };
 typedef struct TokenizerT_ TokenizerT;
 
+// Token Constuctor
 Token* newToken(char* input) {
 	Token* token = (Token*) malloc(sizeof(Token));
 	// TODO figure out type and all that
 	return token;
-}
-
-char[] spec(char a) {
-	
 }
 
 /*
@@ -61,6 +60,68 @@ void TKDestroy( TokenizerT * tk ) {
 }
 
 /*
+ * Takes the first character of the input string and determines which of the initial cases it belongs to.
+ * Then, it calls the corresponding function of that case.
+ */
+void spec(char a) {
+
+	// For example, a == 'T'. Calls wordCase().
+}
+
+// List of case functions:
+Token* wordCase(){
+	
+}
+
+Token* decimalCase(){
+	
+}
+
+Token* periodCase(){
+	
+}
+
+Token* minusCase(){
+	
+}
+
+Token* floatCase(){
+	
+}
+
+Token* zeroCase(){
+	
+}
+
+Token* xCase(){
+	
+}
+
+Token* octalCase(){
+	
+}
+
+Token* hexCase(){
+	
+}
+
+void commentCase(){
+	
+}
+
+Token* quoteCase(){
+	
+}
+
+Token* specialCase(){
+	
+}
+
+Token* badTokenCase(){
+	
+}
+
+/*
  * TKGetNextToken returns the next token from the token stream as a
  * character string.	Space for the returned token should be dynamically
  * allocated.	The caller is responsible for freeing the space once it is
@@ -72,6 +133,8 @@ void TKDestroy( TokenizerT * tk ) {
  * You need to fill in this function as part of your implementation.
  */
 char *TKGetNextToken( TokenizerT * tk ) {
+	
+	// Takes tk->current and prints it to outputStream
 
 	return NULL;
 }

@@ -1,0 +1,31 @@
+TokenizerT {
+	inputString
+	headToken
+	currentToken
+}
+
+Token {
+	token
+	type
+	nextToken
+}
+
+caseFinder(char c) {
+	tempToken = initialCase
+}
+
+TKCreate(inputString) {
+	currentRemainingString = inputString
+	loop {
+		caseFinder(currentRemainingString[0])
+	}
+}
+
+printAllTokens(tokenizer) {
+	if tokenizer has next
+}
+
+main(inputString) {
+	check for bad input
+	tokens = TKCreate(inputString);
+}

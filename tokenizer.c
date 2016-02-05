@@ -7,19 +7,28 @@
 #include <stdlib.h>
 #include <string.h>
 
+global char* inputString;
+
 struct Token_ {
 	char* token;
 	char* type;
-	Token* next;
-}
+	struct Token_* next;
+};
 typedef struct Token_ Token;
 
 struct TokenizerT_ {
-	char* input;
+	char* inputString;
 	Token* head;
 	Token* current;
 };
 typedef struct TokenizerT_ TokenizerT;
+
+// Token Constuctor
+Token* newToken(char* input) {
+	Token* token = (Token*) malloc(sizeof(Token));
+	// TODO figure out type and all that
+	return token;
+}
 
 /*
  * TKCreate creates a new TokenizerT object for a given token stream
@@ -34,10 +43,11 @@ typedef struct TokenizerT_ TokenizerT;
  *
  * You need to fill in this function as part of your implementation.
  */
-
 TokenizerT* TKCreate(char* inputString) {
-	
-	return NULL;
+	TokenizerT* tokenizer = (TokenizerT*) malloc(sizeof(TokenizerT));
+	tokenizer -> inputString = inputString;
+	// TODO do computation
+	return return tokenizer;
 }
 
 /*
@@ -46,8 +56,69 @@ TokenizerT* TKCreate(char* inputString) {
  *
  * You need to fill in this function as part of your implementation.
  */
-
 void TKDestroy( TokenizerT * tk ) {
+}
+
+/*
+ * Takes the first character of the input string and determines which of the initial cases it belongs to.
+ * Then, it calls the corresponding function of that case.
+ */
+void spec(char a) {
+
+	// For example, a == 'T'. Calls wordCase().
+}
+
+// List of case functions:
+Token* wordCase(){
+	
+}
+
+Token* decimalCase(){
+	
+}
+
+Token* periodCase(){
+	
+}
+
+Token* minusCase(){
+	
+}
+
+Token* floatCase(){
+	
+}
+
+Token* zeroCase(){
+	
+}
+
+Token* xCase(){
+	
+}
+
+Token* octalCase(){
+	
+}
+
+Token* hexCase(){
+	
+}
+
+void commentCase(){
+	
+}
+
+Token* quoteCase(){
+	
+}
+
+Token* specialCase(){
+	
+}
+
+Token* badTokenCase(){
+	
 }
 
 /*
@@ -61,8 +132,9 @@ void TKDestroy( TokenizerT * tk ) {
  *
  * You need to fill in this function as part of your implementation.
  */
-
 char *TKGetNextToken( TokenizerT * tk ) {
+	
+	// Takes tk->current and prints it to outputStream
 
 	return NULL;
 }

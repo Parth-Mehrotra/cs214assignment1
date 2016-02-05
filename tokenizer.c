@@ -99,32 +99,25 @@ Token* getInit(char* string) {
 
 	// For example, a == 'T'. Calls wordCase().
 	char a = *string;
-	if(isalpha(a))
-	{
+	if(isalpha(a)) {
 		return wordCase(string);
 	}
-	else if(a == '0')
-	{
+	else if(a == '0') {
 		return zeroCase(string);
 	}
-	else if(isdigit(a))
-	{
+	else if(isdigit(a)) {
 		return decimalCase(string);
 	}
-	else if(isspace(a))
-	{
+	else if(isspace(a)) {
 		return NULL;
 	}
-	else if(a == '.')
-	{
+	else if(a == '.') {
 		return periodCase(string);
 	}
-	else if(a == '-')
-	{
+	else if(a == '-') {
 		return minusCase(string);
 	}
-	else
-	{
+	else {
 		return specialCase(string);
 	}
 }
@@ -148,13 +141,20 @@ TokenizerT* TKCreate(char* inputString) {
 	tokenizer->head = NULL;
 	tokenizer->current = NULL;
 
-	char* currentStr = (char*) calloc(strlen(inputString), sizeof(char));	
-	strcpy(currentStr, inputString);
+	int isNext = 1;
 
-	Token* temp = getInit(currentStr);
-	if(tokenizer->head == NULL)
-		tokenizer->head = temp;
-	tokenizer->current = temp;
+	while (isNext) {
+
+		char* currentStr = (char*) calloc(strlen(inputString), sizeof(char));	
+		strcpy(currentStr, inputString);
+
+		Token* temp = getInit(currentStr);
+		if(tokenizer->head == NULL) {
+			tokenizer->head = temp;
+		}
+		tokenizer->current = temp;
+		free(currentStr);
+	}
 
 	return tokenizer;
 }

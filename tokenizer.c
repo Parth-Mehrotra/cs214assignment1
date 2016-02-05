@@ -31,6 +31,44 @@ Token* newToken(char* input) {
 }
 
 /*
+ * Takes the first character of the input string and determines which of the initial cases it belongs to.
+ * Then, it calls the corresponding function of that case.
+ */
+void getInit(char* string) {
+
+	// For example, a == 'T'. Calls wordCase().
+	char a = *string;
+	if(isalpha(a))
+	{
+		wordCase();
+	}
+	else if(a == '0')
+	{
+		zeroCase();
+	}
+	else if(isdigit(a))
+	{
+		decimalCase();
+	}
+	else if(isspace(a))
+	{
+		return;
+	}
+	else if(a == '.')
+	{
+		periodCase();
+	}
+	else if(a == '-')
+	{
+		minusCase();
+	}
+	else
+	{
+		specialCase();
+	}
+}
+
+/*
  * TKCreate creates a new TokenizerT object for a given token stream
  * (given as a string).
  * 
@@ -45,9 +83,16 @@ Token* newToken(char* input) {
  */
 TokenizerT* TKCreate(char* inputString) {
 	TokenizerT* tokenizer = (TokenizerT*) malloc(sizeof(TokenizerT));
-	tokenizer -> inputString = inputString;
-	// TODO do computation
-	return return tokenizer;
+	tokenizer->inputString = inputString;
+	tokenizer->head = NULL;
+	tokenizer->current = NULL;
+
+	char* currentStr = (char*) calloc(strlen(inputString), sizeof(char));	
+	strcpy(currentStr, inputString);
+
+	getInit(currentStr);
+
+	return tokenizer;
 }
 
 /*
@@ -59,14 +104,6 @@ TokenizerT* TKCreate(char* inputString) {
 void TKDestroy( TokenizerT * tk ) {
 }
 
-/*
- * Takes the first character of the input string and determines which of the initial cases it belongs to.
- * Then, it calls the corresponding function of that case.
- */
-void spec(char a) {
-
-	// For example, a == 'T'. Calls wordCase().
-}
 
 // List of case functions:
 Token* wordCase(){
@@ -147,8 +184,9 @@ char *TKGetNextToken( TokenizerT * tk ) {
  * TODO: check argc
  */
 int main(int argc, char **argv) {
-	printf("%s\n", argv[1]);
-	int len = strlen(argv[1]);
-	printf("%d\n", len);
+	if(argc != 2){printf("bad input\n");
+	TokenizerT tokenizer = TKCreate(argv[1]);
+
+	
 	return 0;
 }

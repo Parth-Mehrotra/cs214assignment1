@@ -194,8 +194,8 @@ char *TKGetNextToken( TokenizerT * tk ) {
  * The string argument contains the tokens.
  * Print out the tokens in the second string in left-to-right order.
  * Each token should be printed on a separate line.
+ * TODO: check argc
  */
-
 int main(int argc, char **argv) {
 	if(argc != 2){printf("bad input\n");}
 	TokenizerT* tokenizer = TKCreate(argv[1]);

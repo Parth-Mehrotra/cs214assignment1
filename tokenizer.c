@@ -32,63 +32,245 @@ Token* newToken(char* input, char* type) {
 }
 
 // List of case functions:
-Token* wordCase(char* currentString){
-	int i = 0;
+Token* wordCase(char* currentString, int startIndex){
+	int i = startIndex;
 	while(isalnum(*(currentString + i)))
 	{
 		i++;
 	}
-	char* temp = (char*) calloc((i+1), sizeof(char));
-	temp = strncpy(temp, currentString, i);
+	char* temp = (char*) calloc((i+2), sizeof(char));
+	temp = strncpy(temp, currentString, i + 1);
 	return newToken(temp, "word");
 }
 
-Token* decimalCase(char* currentString){
+Token* floatCase(char* currentString, int startIndex){
+	int i = startIndex;
+	while(isdigit(*(currentString + i)))
+	{
+		i++;
+	}
+	if(*(currentString + i) != '\0'){
+		if(*(currentString + i) == 'e' || *(currentString + i) == 'E'){
+			if(*(currentString + i + 1) != '\0'){
+				if(isdigit(*(currentString + i + 1))){
+					i = i + 1;
+					while(isdigit(*(currentString + i))){
+						i++;
+					}
+				}
+				else if(*(currentString + i + 1) == '+' || *(currentString + i + 1) == '-'){
+					if(*(currentString + i + 2) != '\0'){
+						if(isdigit(*(currentString + i + 2))){
+							i = i + 2;
+							while(isdigit(*(currentString + i))){
+								i++;
+							}
+						}
+
+					}
+				}
+			}
+		}
+	}
+
+	char* temp = (char*) calloc((i+2), sizeof(char));
+	temp = strncpy(temp, currentString, i + 1);
+	return newToken(temp, "float");
+}
+
+Token* specialCase(char* currentString, int startIndex){
 	
 }
 
-Token* periodCase(char* currentString){
-	
+Token* decimalCase(char* currentString, int startIndex){
+	int i = startIndex;
+	while(isdigit(*(currentString + i)))
+	{
+		i++;
+	}
+	if(*(currentString + i) == '.')	{
+		if(*(currentString + i + 1) != '\0'){
+			if(isdigit(*(currentString + i + 1))){
+				return floatCase(currentString, i + 1);
+			}
+		}
+	}
+	char* temp = (char*) calloc((i+2), sizeof(char));
+	temp = strncpy(temp, currentString, i + 1);
+	return newToken(temp, "decimal");
 }
 
-Token* minusCase(char* currentString){
-	
+Token* periodCase(char* currentString, int startIndex){
+	int i = startIndex;
+	if(*(currentString + i) == '.')	{
+		if(*(currentString + i + 1) != '\0'){
+			if(isdigit(*(currentString + i + 1))){
+				return floatCase(currentString, i + 1);
+			}
+		}
+		return specialCase(currentString, i);
+	}
+	else{ // if the first character is a dash
+		if(*(currentString + i + 2) != '\0'){
+			if(isdigit(*(currentString + i + 2))){
+				return floatCase(currentString, i + 2);
+			}
+		}
+		return specialCase(currentString, i);
+	}
 }
 
-Token* floatCase(char* currentString){
-	
+Token* minusCase(char* currentString, int startIndex){
+	int i = startIndex;
+	if(*(currentString + i + 1) != '\0'){
+		if(isdigit(*(currentString + i + 1))){
+			return decimalCase(currentString, i + 1);
+		}
+		if(*(currentString + i + 1) == '.'){
+			return periodCase(currentString, i + 1);
+		}
+	}
+	return specialCase(currentString, i);
 }
 
-Token* zeroCase(char* currentString){
-	
+Token* octalCase(char* currentString, int startIndex){
+	int i = startIndex;
+	while(isdigit(*(currentString + i)))
+	{
+		if(*(currentString + i) > '7')
+			break;
+		i++;
+	}
+	char* temp = (char*) calloc((i+2), sizeof(char));
+	temp = strncpy(temp, currentString, i + 1);
+	return newToken(temp, "octal");
 }
 
-Token* xCase(char* currentString){
-	
+Token* hexCase(char* currentString, int startIndex){
+	int i = startIndex;
+	while(isalnum(*(currentString + i)))
+	{
+		if(isalpha(*(currentString + i))){
+			if(!((*(currentString + i) > 'A' && *(currentString + i) < 'F') || 
+			(*(currentString + i) > 'a' && *(currentString + i) < 'f'))){
+				break;
+			}
+		}
+		i++;
+	}
+	char* temp = (char*) calloc((i+2), sizeof(char));
+	temp = strncpy(temp, currentString, i + 1);
+	return newToken(temp, "hex");
 }
 
-Token* octalCase(char* currentString){
-	
+Token* xCase(char* currentString, int startIndex){
+	int i = startIndex;
+	if(*(currentString + i + 1) != '\0')	{
+		if(isdigit(*(currentString + i + 1)) || (*(currentString + i + 1) > 'A' && *(currentString + i + 1) < 'F') 
+			|| (*(currentString + i + 1) > 'a' && *(currentString + i + 1) < 'f')){
+			return hexCase(currentString, i + 1);
+		}
+	}
+	char* temp = (char*) calloc((i+1), sizeof(char));
+	temp = strncpy(temp, currentString, i);
+	return newToken(temp, "decimal");
 }
 
-Token* hexCase(char* currentString){
-	
+Token* zeroCase(char* currentString, int startIndex){
+	int i = startIndex;
+	if(*(currentString + i + 1) != '\0')	{
+		if(isdigit(*(currentString + i + 1))){
+			if(*(currentString + i + 1) < '8' && *(currentString + i + 1) != '0'){
+				return octalCase(currentString, i+1);
+			}
+		}
+		else if(*(currentString + i + 1) == 'x' || *(currentString + i + 1) == 'X'){
+			return xCase(currentString, i+1);
+		}
+		else if(*(currentString + i + 1) == '.'){
+			if(*(currentString + i + 2) != '\0'){
+				if(isdigit(*(currentString + i + 2))){
+					return floatCase(currentString, i + 2);
+				}
+			}
+		}
+	}
+	char* temp = (char*) calloc((i+2), sizeof(char));
+	temp = strncpy(temp, currentString, i + 1);
+	return newToken(temp, "decimal");
+
 }
 
-void commentCase(char* currentString){
-	
+Token* commentCase(char* currentString, int startIndex){
+	int i = startIndex;
+	if(*(currentString + 1)	== '/'){
+		while(1){
+			if(*(currentString + i) == '\n'){
+				break;
+			}
+			if(*(currentString + i) == '\\'){
+				if(*(currentString + i + 1) != '\0'){
+						if(*(currentString + i + 1) == 'n'){
+							break;
+						}
+				}
+			}
+			i++;
+		}
+		char* temp = (char*) calloc((i+2), sizeof(char));
+		temp = strncpy(temp, currentString, i + 1);
+		return newToken(temp, "comment");
+	}
+	else{ // if the second character is *
+		while(1){
+			if(*(currentString + i) == '*'){
+				if(*(currentString + i + 1) != '\0'){
+						if(*(currentString + i + 1) == '/'){
+							break;
+						}
+				}
+			}
+			i++;
+		}
+		char* temp = (char*) calloc((i+2), sizeof(char));
+		temp = strncpy(temp, currentString, i + 1);
+		return newToken(temp, "comment");
+
+	}
 }
 
-Token* quoteCase(char* currentString){
-	
+Token* quoteCase(char* currentString, int startIndex){
+	int i = startIndex;
+	if(*(currentString) == '''){
+		while(1){
+			if(*(currentString + i) == '''){
+				break;
+			}
+			i++;
+		}
+		char* temp = (char*) calloc((i+2), sizeof(char));
+		temp = strncpy(temp, currentString, i + 1);
+		return newToken(temp, "quote");
+	}
+	else{ // if the second character is "
+		while(1){
+			if(*(currentString + i) == '"'){
+				break;
+			}
+			i++;
+		}
+		char* temp = (char*) calloc((i+2), sizeof(char));
+		temp = strncpy(temp, currentString, i + 1);
+		return newToken(temp, "quote");
+	}
 }
 
-Token* specialCase(char* currentString){
-	
-}
+Token* badTokenCase(char* currentString, int startIndex){
+	int i = startIndex;
+	char* temp = (char*) calloc((i+2), sizeof(char));
+	temp = strncpy(temp, currentString, i + 1);
+	return newToken(temp, "bad token");
 
-Token* badTokenCase(char* currentString){
-	
 }
 
 /*
@@ -100,25 +282,25 @@ Token* getInit(char* string) {
 	// For example, a == 'T'. Calls wordCase().
 	char a = *string;
 	if(isalpha(a)) {
-		return wordCase(string);
+		return wordCase(string, 0);
 	}
 	else if(a == '0') {
-		return zeroCase(string);
+		return zeroCase(string, 0);
 	}
 	else if(isdigit(a)) {
-		return decimalCase(string);
+		return decimalCase(string, 0);
 	}
 	else if(isspace(a)) {
 		return NULL;
 	}
 	else if(a == '.') {
-		return periodCase(string);
+		return periodCase(string, 0);
 	}
 	else if(a == '-') {
-		return minusCase(string);
+		return minusCase(string, 0);
 	}
 	else {
-		return specialCase(string);
+		return specialCase(string, 0);
 	}
 }
 

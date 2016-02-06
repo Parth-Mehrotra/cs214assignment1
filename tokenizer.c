@@ -40,7 +40,7 @@ Token* wordCase(char* currentString, int startIndex){
 	}
 	char* temp = (char*) calloc((i+2), sizeof(char));
 	temp = strncpy(temp, currentString, i + 1);
-	return newToken(temp, "word");
+	return newToken(temp, "Word");
 }
 
 Token* floatCase(char* currentString, int startIndex){

@@ -79,7 +79,317 @@ Token* floatCase(char* currentString, int startIndex){
 }
 
 Token* specialCase(char* currentString, int startIndex){
-	
+	int i = startIndex;
+	char a = *(currentString + i);
+	char typeString[30];
+	int j = 0;
+	for(j = 0; j < 30; j++){
+		typeString[j] = '\0';
+	}
+	int numChars = 1;
+	while(1){
+	if(isspace(a)){
+		strcpy(typeString, "Whitespace");
+		numChars = 1;
+		break;
+	}
+	else if(a == '\\'){
+		if(*(currentString + i + 1) != '\0'){
+			if(*(currentString + i + 1) == '0' || *(currentString + i + 1) == 't' || 
+			*(currentString + i + 1) == 'n' || *(currentString + i + 1) == 'v' || 
+			*(currentString + i + 1) == 'f' || *(currentString + i + 1) == 'r'){ 
+				strcpy(typeString, "Whitespace");
+				numChars = 2;
+				break;
+			}
+		}
+		strcpy(typeString, "Backslash");
+		numChars = 1;
+		break;
+	}
+	else if(a == '('){
+		strcpy(typeString, "Left Parenthesis");
+		numChars = 1;
+		break;
+	}
+	else if(a == ')'){
+		strcpy(typeString, "Right Parenthesis");
+		numChars = 1;
+		break;
+	}
+	else if(a == '['){
+		strcpy(typeString, "Left Bracket");
+		numChars = 1;
+		break;
+	}
+	else if(a == ']'){
+		strcpy(typeString, "Right Bracket");
+		numChars = 1;
+		break;
+	}
+	else if(a == '.'){
+		strcpy(typeString, "Period");
+		numChars = 1;
+		break;
+	}
+	else if(a == '*'){
+		if(*(currentString + i + 1) != '\0'){
+			if(*(currentString + i + 1) == '='){
+				strcpy(typeString, "TimesEquals");
+				numChars = 2;
+				break;
+			}
+		}
+		strcpy(typeString, "Asterisk");
+		numChars = 1;
+		break;
+	}
+	else if(a == '&'){
+		if(*(currentString + i + 1) != '\0'){
+			if(*(currentString + i + 1) == '&'){
+				strcpy(typeString, "Logical AND");
+				numChars = 2;
+				break;
+			}
+			if(*(currentString + i + 1) == '='){
+				strcpy(typeString, "BinaryANDEquals");
+				numChars = 2;
+				break;
+			}
+		}
+		strcpy(typeString, "Ampersand");
+		numChars = 1;
+		break;
+	}
+	else if(a == '!'){
+		if(*(currentString + i + 1) != '\0'){
+			if(*(currentString + i + 1) == '='){
+				strcpy(typeString, "Not Equal");
+				numChars = 2;
+				break;
+			}
+		}
+		strcpy(typeString, "Exclamation Point");
+		numChars = 1;
+		break;
+	}
+	else if(a == '~'){
+		strcpy(typeString, "Tilda");
+		numChars = 1;
+		break;
+	}
+	else if(a == '+'){
+		if(*(currentString + i + 1) != '\0'){
+			if(*(currentString + i + 1) == '+'){
+				strcpy(typeString, "Increment");
+				numChars = 2;
+				break;
+			}
+			if(*(currentString + i + 1) == '='){
+				strcpy(typeString, "PlusEquals");
+				numChars = 2;
+				break;
+			}
+		}
+		strcpy(typeString, "Plus");
+		numChars = 1;
+		break;
+	}
+	else if(a == '-'){
+		if(*(currentString + i + 1) != '\0'){
+			if(*(currentString + i + 1) == '-'){
+				strcpy(typeString, "Decrement");
+				numChars = 2;
+				break;
+			}
+			if(*(currentString + i + 1) == '='){
+				strcpy(typeString, "MinusEquals");
+				numChars = 2;
+				break;
+			}
+		}
+		strcpy(typeString, "Dash");
+		numChars = 1;
+		break;
+	}
+	else if(a == '%'){
+		if(*(currentString + i + 1) != '\0'){
+			if(*(currentString + i + 1) == '='){
+				strcpy(typeString, "ModuloEquals");
+				numChars = 2;
+				break;
+			}
+		}
+		strcpy(typeString, "Percent");
+		numChars = 1;
+		break;
+	}
+	else if(a == '>'){
+		if(*(currentString + i + 1) != '\0'){
+			if(*(currentString + i + 1) == '>'){
+				if(*(currentString + i + 2) != '\0'){
+					if(*(currentString + i + 2) == '='){
+						strcpy(typeString, "RightShiftEquals");
+						numChars = 3;
+						break;
+					}
+				}
+				strcpy(typeString, "Shift Right");
+				numChars = 2;
+				break;
+			}
+			if(*(currentString + i + 1) == '='){
+				strcpy(typeString, "Greater or Equals");
+				numChars = 2;
+				break;
+			}
+		}
+		strcpy(typeString, "Greater Than");
+		numChars = 1;
+		break;
+	}
+	else if(a == '<'){
+		if(*(currentString + i + 1) != '\0'){
+			if(*(currentString + i + 1) == '<'){
+				if(*(currentString + i + 2) != '\0'){
+					if(*(currentString + i + 2) == '='){
+						strcpy(typeString, "LeftShiftEquals");
+						numChars = 3;
+						break;
+					}
+				}
+				strcpy(typeString, "Shift Left");
+				numChars = 2;
+				break;
+			}
+			if(*(currentString + i + 1) == '='){
+				strcpy(typeString, "Less than or Equals");
+				numChars = 2;
+				break;
+			}
+		}
+		strcpy(typeString, "Less Than");
+		numChars = 1;
+		break;
+	}
+	else if(a == '='){
+		if(*(currentString + i + 1) != '\0'){
+			if(*(currentString + i + 1) == '='){
+				strcpy(typeString, "Equals");
+				numChars = 2;
+				break;
+			}
+		}
+		strcpy(typeString, "Equal");
+		numChars = 1;
+		break;
+	}
+	else if(a == '^'){
+		if(*(currentString + i + 1) != '\0'){
+			if(*(currentString + i + 1) == '='){
+				strcpy(typeString, "BinaryExclusiveOREquals");
+				numChars = 2;
+				break;
+			}
+		}
+		strcpy(typeString, "Caret");
+		numChars = 1;
+		break;
+	}
+	else if(a == '|'){
+		if(*(currentString + i + 1) != '\0'){
+			if(*(currentString + i + 1) == '|'){
+				strcpy(typeString, "Logical OR");
+				numChars = 2;
+				break;
+			}
+			if(*(currentString + i + 1) == '='){
+				strcpy(typeString, "BinaryOREquals");
+				numChars = 2;
+				break;
+			}
+		}
+		strcpy(typeString, "Vertical Bar");
+		numChars = 1;
+		break;
+	}
+	else if(a == '?'){
+		strcpy(typeString, "Question Mark");
+		numChars = 1;
+		break;
+	}
+	else if(a == ','){
+		strcpy(typeString, "Comma");
+		numChars = 1;
+		break;
+	}
+	else if(a == '`'){
+		strcpy(typeString, "Grave Accent");
+		numChars = 1;
+		break;
+	}
+	else if(a == '@'){
+		strcpy(typeString, "At Sign");
+		numChars = 1;
+		break;
+	}
+	else if(a == '#'){
+		strcpy(typeString, "Hashtag");
+		numChars = 1;
+		break;
+	}
+	else if(a == '$'){
+		strcpy(typeString, "Dollar Sign");
+		numChars = 1;
+		break;
+	}
+	else if(a == '_'){
+		strcpy(typeString, "Underscore");
+		numChars = 1;
+		break;
+	}
+	else if(a == '{'){
+		strcpy(typeString, "Left Curly Bracket");
+		numChars = 1;
+		break;
+	}
+	else if(a == '}'){
+		strcpy(typeString, "Right Curly Bracket");
+		numChars = 1;
+		break;
+	}
+	else if(a == '/'){
+		if(*(currentString + i + 1) != '\0'){
+			if(*(currentString + i + 1) == '='){
+				strcpy(typeString, "DivideEquals");
+				numChars = 2;
+				break;
+			}
+		}
+
+		strcpy(typeString, "Forward Slash");
+		numChars = 1;
+		break;
+	}
+	else if(a == ':'){
+		strcpy(typeString, "Colon");
+		numChars = 1;
+		break;
+	}
+	else if(a == ';'){
+		strcpy(typeString, "Semicolon");
+		numChars = 1;
+		break;
+	}
+	else{
+		strcpy(typeString, "Bad Token");
+		numChars = 1;
+		break;
+	}
+	}
+	char* temp = (char*) calloc(numChars + 1, sizeof(char));
+	temp = strncpy(temp, currentString, numChars);
+	return newToken(temp, typeString);
 }
 
 Token* decimalCase(char* currentString, int startIndex){
@@ -97,7 +407,7 @@ Token* decimalCase(char* currentString, int startIndex){
 	}
 	char* temp = (char*) calloc((i+2), sizeof(char));
 	temp = strncpy(temp, currentString, i + 1);
-	return newToken(temp, "decimal");
+	return newToken(temp, "Decimal Number");
 }
 
 Token* periodCase(char* currentString, int startIndex){
@@ -143,7 +453,7 @@ Token* octalCase(char* currentString, int startIndex){
 	}
 	char* temp = (char*) calloc((i+2), sizeof(char));
 	temp = strncpy(temp, currentString, i + 1);
-	return newToken(temp, "octal");
+	return newToken(temp, "Octal Number");
 }
 
 Token* hexCase(char* currentString, int startIndex){
@@ -160,7 +470,7 @@ Token* hexCase(char* currentString, int startIndex){
 	}
 	char* temp = (char*) calloc((i+2), sizeof(char));
 	temp = strncpy(temp, currentString, i + 1);
-	return newToken(temp, "hex");
+	return newToken(temp, "Hexadecimal Number");
 }
 
 Token* xCase(char* currentString, int startIndex){
@@ -173,7 +483,7 @@ Token* xCase(char* currentString, int startIndex){
 	}
 	char* temp = (char*) calloc((i+1), sizeof(char));
 	temp = strncpy(temp, currentString, i);
-	return newToken(temp, "decimal");
+	return newToken(temp, "Decimal Number");
 }
 
 Token* zeroCase(char* currentString, int startIndex){
@@ -197,7 +507,7 @@ Token* zeroCase(char* currentString, int startIndex){
 	}
 	char* temp = (char*) calloc((i+2), sizeof(char));
 	temp = strncpy(temp, currentString, i + 1);
-	return newToken(temp, "decimal");
+	return newToken(temp, "Decimal Number");
 
 }
 
@@ -219,7 +529,7 @@ Token* commentCase(char* currentString, int startIndex){
 		}
 		char* temp = (char*) calloc((i+2), sizeof(char));
 		temp = strncpy(temp, currentString, i + 1);
-		return newToken(temp, "comment");
+		return newToken(temp, "Comment");
 	}
 	else{ // if the second character is *
 		while(1){
@@ -234,7 +544,7 @@ Token* commentCase(char* currentString, int startIndex){
 		}
 		char* temp = (char*) calloc((i+2), sizeof(char));
 		temp = strncpy(temp, currentString, i + 1);
-		return newToken(temp, "comment");
+		return newToken(temp, "Comment");
 
 	}
 }
@@ -250,7 +560,7 @@ Token* quoteCase(char* currentString, int startIndex){
 		}
 		char* temp = (char*) calloc((i+2), sizeof(char));
 		temp = strncpy(temp, currentString, i + 1);
-		return newToken(temp, "quote");
+		return newToken(temp, "String");
 	}
 	else{ // if the second character is "
 		while(1){
@@ -261,16 +571,8 @@ Token* quoteCase(char* currentString, int startIndex){
 		}
 		char* temp = (char*) calloc((i+2), sizeof(char));
 		temp = strncpy(temp, currentString, i + 1);
-		return newToken(temp, "quote");
+		return newToken(temp, "String");
 	}
-}
-
-Token* badTokenCase(char* currentString, int startIndex){
-	int i = startIndex;
-	char* temp = (char*) calloc((i+2), sizeof(char));
-	temp = strncpy(temp, currentString, i + 1);
-	return newToken(temp, "bad token");
-
 }
 
 /*
@@ -291,7 +593,7 @@ Token* getInit(char* string) {
 		return decimalCase(string, 0);
 	}
 	else if(isspace(a)) {
-		return NULL;
+		return specialCase(string, 0);
 	}
 	else if(a == '.') {
 		return periodCase(string, 0);

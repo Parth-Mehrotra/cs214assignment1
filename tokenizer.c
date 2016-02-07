@@ -691,6 +691,8 @@ TokenizerT* TKCreate(char* inputString) {
     }
 	tokenizer -> current = tokenizer -> head;
 
+    tokenizer->current = tokenizer->head;
+
     return tokenizer;
 }
 

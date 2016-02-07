@@ -700,13 +700,15 @@ TokenizerT* TKCreate(char* inputString) {
  * You need to fill in this function as part of your implementation.
  */
 void TKDestroy( TokenizerT * tk ) {
-    while (tk -> head != NULL) {
+    while (tk -> head -> next != NULL) {
         Token* temp = tk -> head;
-        while (temp -> next != NULL) {
+        while (temp -> next -> next != NULL) {
             temp = temp -> next;
         }
-        free(temp);
+        free(temp -> next);
+		temp -> next = NULL;
     }
+	free(tk->head);
     free(tk);
 }
 
@@ -747,6 +749,7 @@ int main(int argc, char **argv) {
     }
 
     TokenizerT* tokenizer = TKCreate(argv[1]);
+	TKDestroy(tokenizer);
 
     return 0;
 }

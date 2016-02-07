@@ -1,3 +1,7 @@
+# Tokenizer
+### Wael Ayadi and Parth Mehrotra
+
+Our Tokenizer was created in a way that would minimize "bad tokens". Our program is structured largely as a finite state machine that takes each character as an input. The states and several of the testcases that highlight features are listed bellow.
 
 # Character Read Flow:
 

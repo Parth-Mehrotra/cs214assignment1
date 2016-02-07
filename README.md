@@ -46,11 +46,13 @@ Maybe negative decimal, negative float, or Special character '-'
 ## Word Case
 
 EX: "ABC123" is one word.
+
 * Upon reaching anything that's not alphanumeric, *END*.
 
 ## Decimal Case
 
 EX: "12354" is a decimal.
+
 * if reaches anything that's not numeric, *END*
 * if reaches a period: 
 	* If the character that follows the period is non-numeric, then it's a *END* + *Special Character 'period'*  
@@ -61,6 +63,7 @@ EX: "12354" is a decimal.
 
 NOTE: Period case is not a Token. It is either part of *Float case* or *Special Character case*  
 EX: "." is period case. "-." is also period case.
+
 * Check following character:
 	* if it is a numeric, *Float case*
 	* else, *Special character '.'* or *Special character '-'* + *Special character '.'*
@@ -69,6 +72,7 @@ EX: "." is period case. "-." is also period case.
 
 NOTE: Minus case is not a Token. It is either a *Decimal*, *Float*, or *Special Character*  
 EX: "-" is minus case.
+
 * Check the following character:
 	* if it is numeric, *Decimal case*.
 	* if it is a period, *Period case*.
@@ -77,6 +81,7 @@ EX: "-" is minus case.
 ## Float Case
 
 EX: "3.14" is one float.
+
 * Continue until reaching any non-numeric character or the letter "e".
 	* if it is not the letter e, *END*
 	* else, check the following character
@@ -90,6 +95,7 @@ EX: "3.14" is one float.
 
 NOTE: Zero Case is not a Token.  
 EX: "0" is zero case.
+
 * Look at the character after 0.
 	* if it's anything that's non-numeric, not the letter x, the number `0`, or not a period. Then it is the *Decimal `0`*  
 	EX: "0ABC" is *Decimal 0* + *Word ABC*
@@ -103,6 +109,7 @@ EX: "0" is zero case.
 
 NOTE: X Case is not a Token.  
 EX: "0x" is X case.
+
 * If then the following character is 0-9 || a-f, then *Hex case*.
 	* If it's alphabetic and NOT a-f then it's *Decimal '0'* + *Word case*.
 	* If special character, *Decimal '0'* + *Word case 'x'* + *Special Character case*.
@@ -110,6 +117,7 @@ EX: "0x" is X case.
 ## Octal Case
 
 EX: "0456" is Octal case.
+
 * If anything non-numeric or greater than 7, *END*.
 
 NOTE: There is no octal quantity "0" with this implementation. "00" = *Decimal '0'* + *Decimal '0'*
@@ -122,18 +130,21 @@ EX: "0x45AF" is Hex case.
 ## Comment Case
 
 EX: "//1234" is Comment Case. "/*1234" is also Comment case.
+
 * if comment started with '//', skip all following characters until a '\n' is reached.
 * if comment started with '/*', skip all following characters until a '*/' is reached.
 
 ## Quote Case
 
 EX: "ABCD"1n89YS&hd1u2b8dg8"123" has a Quote case in it
+
 * if started with a single quote, all following characters until a single quote is reached. Call the token a string.
 * if started with a double quote, all following characters until a double quote is reached. Call the token a string.
 	
 ## Special Character Case
 
 List of *Special* Special characters:
+
 * '/' Forward Slash  
  This depends on the following character:
 * if '=', then '/=' DivideEquals
@@ -151,6 +162,7 @@ This depends on the following character:
 * if either of these, *Quote case*
 
 List of Special characters:
+
 * '(' Left Parenthesis
 * ')' Right Parenthesis
 * '[' Left Bracket
@@ -238,3 +250,146 @@ unsigned
 void
 volatile
 while
+
+# Test cases
+## Simple word case
+```
+-bash-4.1$ ./a.out "hello how are you"
+Word "hello"
+Word "how"
+Word "are"
+Word "you"
+```
+
+## Different delimeters
+```
+-bash-4.1$ ./a.out "hello#how?are%you"
+Word "hello"
+Hashtag "#"
+Word "how"
+Question Mark "?"
+Word "are"
+Percent "%"
+Word "you"
+```
+
+## Number then word
+```
+-bash-4.1$ ./a.out "123hello"
+Decimal Number "123"
+Word "hello"
+```
+
+## Hex then word
+```
+-bash-4.1$ ./a.out "0x1342hello"
+Hexadecimal Number "0x1342"
+Word "hello"
+```
+
+## Octal then word
+```
+-bash-4.1$ ./a.out "0234asdflksjfd"
+Octal Number "0234"
+Word "asdflksjfd"
+```
+
+## Octal then decimal
+```
+-bash-4.1$ ./a.out "012899"
+Octal Number "012"
+Decimal Number "899"
+```
+
+## Negative number and words
+```
+-bash-4.1$ ./a.out "-3hello  hi"
+Decimal Number "-3"
+Word "hello"
+Word "hi"
+```
+
+## Negative floats and numbers
+```
+-bash-4.1$ ./a.out "-3.14hello  hi"
+float "-3.14"
+Word "hello"
+Word "hi"
+```
+
+## Multiple decimal points
+```
+-bash-4.1$ ./a.out "-3.14.15.16"
+float "-3.14"
+float ".15"
+float ".16"
+```
+
+## Words then float
+```
+-bash-4.1$ ./a.out "zero point five 0.5"
+Word "zero"
+Word "point"
+Word "five"
+float "0.5"
+```
+
+## C Keywords
+```
+-bash-4.1$ ./a.out "some C keywords char float"
+Word "some"
+Word "C"
+Word "keywords"
+C Keyword "char"
+C Keyword "float"
+```
+
+## Ignoring block comments
+```
+-bash-4.1$ ./a.out "oh theres no comment here /*shhh Im invisible*/. None at all"
+Word "oh"
+Word "theres"
+Word "no"
+Word "comment"
+Word "here"
+Period "."
+Word "None"
+Word "at"
+Word "all"
+```
+
+## Ignoring line comments
+```
+-bash-4.1$ ./a.out "some C keywords char//this should not show up\n float"
+Word "some"
+Word "C"
+Word "keywords"
+C Keyword "char"
+C Keyword "float"
+```
+
+## Identifying strings with apostrophes
+```
+-bash-4.1$ ./a.out "this is a string with apostrophe: 'with apostrophes'"
+Word "this"
+Word "is"
+Word "a"
+Word "string"
+Word "with"
+Word "apostrophe"
+Colon ":"
+String "'with apostrophes'"
+```
+
+## Identifying strings with quotations
+```
+-bash-4.1$ ./a.out "this is a string with quotations: \"with quotations\""
+Word "this"
+Word "is"
+Word "a"
+Word "string"
+Word "with"
+Word "quotations"
+Colon ":"
+String ""with quotations""
+```

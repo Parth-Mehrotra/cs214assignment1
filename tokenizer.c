@@ -710,6 +710,7 @@ TokenizerT* TKCreate(char* inputString) {
         }
         free(currentStr);
     }
+	tokenizer -> current = tokenizer -> head;
 
     tokenizer->current = tokenizer->head;
 
@@ -728,10 +729,12 @@ void TKDestroy( TokenizerT * tk ) {
         while (temp -> next -> next != NULL) {
             temp = temp -> next;
         }
+		free(temp -> next -> string);
         free(temp -> next);
 		temp -> next = NULL;
     }
-	free(tk->head);
+	free(tk-> head -> string);
+	free(tk -> head);
     free(tk);
 }
 

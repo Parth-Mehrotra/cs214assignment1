@@ -45,8 +45,7 @@ Token* wordCase(char* currentString, int startIndex) {
 
 Token* floatCase(char* currentString, int startIndex) {
     int i = startIndex;
-    while(isdigit(*(currentString + i)))
-    {
+    while(isdigit(*(currentString + i))) {
         i++;
     }
     if(*(currentString + i) != '\0') {

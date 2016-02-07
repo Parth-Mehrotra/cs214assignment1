@@ -550,29 +550,30 @@ Token* commentCase(char* currentString, int startIndex){
 }
 
 Token* quoteCase(char* currentString, int startIndex){
-	int i = startIndex;
-	if(*(currentString) == '''){
-		while(1){
-			if(*(currentString + i) == '''){
-				break;
-			}
-			i++;
-		}
-		char* temp = (char*) calloc((i+2), sizeof(char));
-		temp = strncpy(temp, currentString, i + 1);
-		return newToken(temp, "String");
-	}
-	else{ // if the second character is "
-		while(1){
-			if(*(currentString + i) == '"'){
-				break;
-			}
-			i++;
-		}
-		char* temp = (char*) calloc((i+2), sizeof(char));
-		temp = strncpy(temp, currentString, i + 1);
-		return newToken(temp, "String");
-	}
+	//int i = startIndex;
+	//if(*(currentString) == '''){
+	//	while(1){
+	//		if(*(currentString + i) == '''){
+	//			break;
+	//		}
+	//		i++;
+	//	}
+	//	char* temp = (char*) calloc((i+2), sizeof(char));
+	//	temp = strncpy(temp, currentString, i + 1);
+	//	return newToken(temp, "String");
+	//}
+	//else{ // if the second character is "
+	//	while(1){
+	//		if(*(currentString + i) == '"'){
+	//			break;
+	//		}
+	//		i++;
+	//	}
+	//	char* temp = (char*) calloc((i+2), sizeof(char));
+	//	temp = strncpy(temp, currentString, i + 1);
+	//	return newToken(temp, "String");
+	//}
+	return NULL;
 }
 
 /*
@@ -606,6 +607,10 @@ Token* getInit(char* string) {
 	}
 }
 
+void printToken(Token* token) {
+	printf("%s \"%s\"\n", token->type, token->string);
+}
+
 /*
  * TKCreate creates a new TokenizerT object for a given token stream
  * (given as a string).
@@ -628,20 +633,24 @@ TokenizerT* TKCreate(char* inputString) {
 	int isNext = 1;
 	int strOffset = 0;
 
-	//while (isNext) {
+	while (strOffset < strlen(inputString)) {
 
-		char* currentStr = (char*) calloc(strlen(inputString - strOffset), sizeof(char));	
-		strcpy(currentStr, inputString);
-		printf("currentStr: %s\n", currentStr);
+		char* currentStr = (char*) calloc(strlen(inputString) - strOffset, sizeof(char));	
+		strcpy(currentStr, &inputString[strOffset]);
 
 		Token* temp = getInit(currentStr);
-		printf("size: %d\n", strlen(temp->string));
+		printToken(temp);
+		strOffset += strlen(temp -> string);
+
 		if(tokenizer->head == NULL) {
-			tokenizer->head = temp;
+			tokenizer -> head = temp;
+			tokenizer -> current = temp;
+		} else {
+			tokenizer -> current -> next = temp;
+			tokenizer -> current = temp;
 		}
-		tokenizer->current = temp;
 		free(currentStr);
-	//}
+	}
 
 	return tokenizer;
 }
@@ -653,6 +662,14 @@ TokenizerT* TKCreate(char* inputString) {
  * You need to fill in this function as part of your implementation.
  */
 void TKDestroy( TokenizerT * tk ) {
+	while (tk -> head != NULL) {
+		Token* temp = tk -> head;
+		while (temp -> next != NULL) {
+			temp = temp -> next;
+		}
+		free(temp); 
+	}
+	free(tk);
 }
 
 /*
@@ -668,9 +685,14 @@ void TKDestroy( TokenizerT * tk ) {
  */
 char *TKGetNextToken( TokenizerT * tk ) {
 	
-	// Takes tk->current and prints it to outputStream
+	char* temp = tk -> current -> string;
+	if (tk -> current -> next != NULL) {
+		tk -> current = tk -> current -> next;
+	} else {
+		tk -> current = tk -> head;
+	}
 
-	return NULL;
+	return temp;
 }
 
 /*

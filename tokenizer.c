@@ -743,7 +743,7 @@ char *TKGetNextToken( TokenizerT * tk ) {
  * TODO: check argc
  */
 int main(int argc, char **argv) {
-    if(argc != 2) {
+    if(argc != 2 || strlen(argv[1]) < 1) {
         printf("bad input\n");
         return 1;
     }

@@ -28,6 +28,7 @@ Token* newToken(char* input, char* type) {
     token->string = input;
     token->type = type;
     token->next = NULL;
+    free(input);
     return token;
 }
 

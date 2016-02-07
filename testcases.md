@@ -47,6 +47,30 @@ Octal Number "012"
 Decimal Number "899"
 ```
 
+# Negative number and words
+```
+-bash-4.1$ ./a.out "-3hello  hi"
+Decimal Number "-3"
+Word "hello"
+Word "hi"
+```
+
+# Negative floats and numbers
+```
+-bash-4.1$ ./a.out "-3.14hello  hi"
+float "-3.14"
+Word "hello"
+Word "hi"
+```
+
+# Multiple decimal points
+```
+-bash-4.1$ ./a.out "-3.14.15.16"
+float "-3.14"
+float ".15"
+float ".16"
+```
+
 # Words then float
 ```
 -bash-4.1$ ./a.out "zero point five 0.5"

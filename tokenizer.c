@@ -464,9 +464,11 @@ Token* specialCase(char* currentString, int startIndex) {
         else if(a == '/') {
             if(*(currentString + i + 1) != '\0') {
                 if(*(currentString + i + 1) == '/') {
+			free(typeString);
 			return commentCase(currentString, i + 1);
                 }
 		if(*(currentString + i + 1) == '*') {
+			free(typeString);
 			return commentCase(currentString, i + 1);
                 }
 		if(*(currentString + i + 1) == '=') {
@@ -491,9 +493,11 @@ Token* specialCase(char* currentString, int startIndex) {
             break;
         }
         else if(a == '\'') {
+		free(typeString);
 	    return quoteCase(currentString, i+1);
         }
         else if(a == '\"') {
+		free(typeString);
 	    return quoteCase(currentString, i+1);
         }
         else {
@@ -694,7 +698,7 @@ TokenizerT* TKCreate(char* inputString) {
 
     while (strOffset < strlen(inputString)) {
 
-        char* currentStr = (char*) calloc(strlen(inputString) - strOffset, sizeof(char));
+        char* currentStr = (char*) calloc(strlen(inputString) - strOffset + 1, sizeof(char));
         strcpy(currentStr, &inputString[strOffset]);
 
         Token* temp = getInit(currentStr);
@@ -724,16 +728,19 @@ TokenizerT* TKCreate(char* inputString) {
  * You need to fill in this function as part of your implementation.
  */
 void TKDestroy( TokenizerT * tk ) {
+int count = 0;
     while (tk -> head -> next != NULL) {
         Token* temp = tk -> head;
         while (temp -> next -> next != NULL) {
             temp = temp -> next;
         }
 		free(temp -> next -> string);
+		free(temp -> next -> type);
         free(temp -> next);
 		temp -> next = NULL;
     }
 	free(tk-> head -> string);
+	free(tk-> head-> type);
 	free(tk -> head);
     free(tk);
 }

@@ -142,19 +142,22 @@ TokenizerT* TKCreate(char* inputString) {
 	tokenizer->current = NULL;
 
 	int isNext = 1;
+	int strOffset = 0;
 
-	while (isNext) {
+	//while (isNext) {
 
-		char* currentStr = (char*) calloc(strlen(inputString), sizeof(char));	
+		char* currentStr = (char*) calloc(strlen(inputString - strOffset), sizeof(char));	
 		strcpy(currentStr, inputString);
+		printf("currentStr: %s\n", currentStr);
 
 		Token* temp = getInit(currentStr);
+		printf("size: %d\n", strlen(temp->string));
 		if(tokenizer->head == NULL) {
 			tokenizer->head = temp;
 		}
 		tokenizer->current = temp;
 		free(currentStr);
-	}
+	//}
 
 	return tokenizer;
 }
@@ -167,9 +170,6 @@ TokenizerT* TKCreate(char* inputString) {
  */
 void TKDestroy( TokenizerT * tk ) {
 }
-
-
-
 
 /*
  * TKGetNextToken returns the next token from the token stream as a
@@ -199,7 +199,6 @@ char *TKGetNextToken( TokenizerT * tk ) {
 int main(int argc, char **argv) {
 	if(argc != 2){printf("bad input\n");}
 	TokenizerT* tokenizer = TKCreate(argv[1]);
-	
 	
 	return 0;
 }

@@ -31,8 +31,6 @@
 typedef int (*CompareFuncT)( void *, void * );
 typedef void (*DestructFuncT)( void * );
 
-
-
 //-=-=-=-You must implement all the functions and definitions below-=-=-=-
 
 //=====0: SortedList=====================================
@@ -46,6 +44,7 @@ struct Node
 {
 	void* data;
 	NodePtr next;
+	int numRef;
 };
 typedef struct Node* NodePtr;
 
@@ -56,6 +55,8 @@ struct SortedList
 	DestructFuncT df;
 };
 typedef struct SortedList* SortedListPtr;
+
+void NodeDestroy(SortedListPtr, NodePtr);
 
 /*
  * SLCreate creates a new, empty, 'SortedList'.
@@ -121,7 +122,8 @@ int SLRemove(SortedListPtr list, void *newObj);
  */
 struct SortedListIterator
 {
-
+	SortedListPtr list;
+	NodePrt current;
 };
 typedef struct SortedListIterator* SortedListIteratorPtr;
 

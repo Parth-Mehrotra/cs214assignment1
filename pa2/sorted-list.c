@@ -41,7 +41,17 @@ struct Node
 	int numRef;
 };
 typedef struct Node* NodePtr;
+*/
 
+void NodeDestroy(SortedListPtr list, NodePtr node){
+	if(node == NULL)
+		return;
+	if(list != NULL)
+		list->df(node->data);
+	free(node);
+}
+
+/*
 struct SortedList
 {
 	NodePtr head;
@@ -123,6 +133,7 @@ int SLRemove(SortedListPtr list, void *newObj)
 /*
 struct SortedListIterator
 {
+	SortedListPtr list;
 	NodePrt current;
 };
 typedef struct SortedListIterator* SortedListIteratorPtr;
@@ -138,7 +149,14 @@ typedef struct SortedListIterator* SortedListIteratorPtr;
 
 SortedListIteratorPtr SLCreateIterator(SortedListPtr list)
 {
-
+	if(list == NULL)
+		return NULL;
+	SortedListIteratorPtr temp = (SortedListIteratorPtr) malloc(sizeof(SortedListIterator));
+	temp->list = list;
+	temp->current = list->head;
+	if(temp->current != NULL)
+		temp->current->numRef++;
+	return temp;
 }
 
 /*
@@ -150,7 +168,14 @@ SortedListIteratorPtr SLCreateIterator(SortedListPtr list)
 
 void SLDestroyIterator(SortedListIteratorPtr iter)
 {
-
+	if(iter == NULL)
+		return;
+	if(iter->current != NULL)
+	{
+		if(iter->current->numRef == 1)
+			NodeDestroy(iter->list, iter->current);
+	}
+	free(iter);
 }
 
 //===1.2: SortedList Iterator Get/Next Operations
@@ -170,7 +195,18 @@ void SLDestroyIterator(SortedListIteratorPtr iter)
 
 void * SLNextItem(SortedListIteratorPtr iter)
 {
-
+	if(iter == NULL)
+		return NULL;
+	if(iter->current == NULL)
+		return NULL;
+	NodePtr temp = iter->current->next;
+	iter->current->numRef--;
+	if(iter->current->numRef == 0)
+		NodeDestroy(iter->list, iter->current);
+	iter->current = temp;
+	if(iter->current == NULL)
+		return NULL;
+	return iter->current->data;
 }
 
 /*
@@ -189,6 +225,10 @@ void * SLNextItem(SortedListIteratorPtr iter)
 
 void * SLGetItem( SortedListIteratorPtr iter )
 {
-
+	if(iter == NULL)
+		return NULL;
+	if(iter->current == NULL)
+		return NULL;
+	return iter->current->data;
 }
 

@@ -45,13 +45,13 @@ typedef void (*DestructFuncT)( void * );
 struct Node
 {
 	void* data;
-	Node* next;
+	NodePtr next;
 };
 typedef struct Node* NodePtr;
 
 struct SortedList
 {
-	Node head;
+	NodePtr head;
 	CompareFunct cf;
 	DestructFuncT df;
 };

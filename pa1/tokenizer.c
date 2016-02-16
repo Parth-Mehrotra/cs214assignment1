@@ -48,10 +48,14 @@ Token* wordCase(char* currentString, int startIndex) {
     strcmp(temp, "short") == 0 || strcmp(temp, "signed") == 0 || strcmp(temp, "sizeof") == 0 || strcmp(temp, "static") == 0 ||
     strcmp(temp, "struct") == 0 || strcmp(temp, "switch") == 0 || strcmp(temp, "typedef") == 0 || strcmp(temp, "union") == 0 ||
     strcmp(temp, "unsigned") == 0 || strcmp(temp, "void") == 0 || strcmp(temp, "volatile") == 0 || strcmp(temp, "while") == 0){
-	return newToken(temp, "C Keyword");
+    char* temp2 = (char*) calloc(30, sizeof(char));
+    strcpy(temp2, "C Keyword");
+	return newToken(temp, temp2);
     }
 
-    return newToken(temp, "Word");
+    char* temp2 = (char*) calloc(30, sizeof(char));
+    strcpy(temp2, "Word");
+    return newToken(temp, temp2);
 }
 
 Token* floatCase(char* currentString, int startIndex) {
@@ -85,7 +89,9 @@ Token* floatCase(char* currentString, int startIndex) {
 
     char* temp = (char*) calloc((i+1), sizeof(char));
     temp = strncpy(temp, currentString, i);
-    return newToken(temp, "float");
+    char* temp2 = (char*) calloc(30, sizeof(char));
+    strcpy(temp2, "Float");
+    return newToken(temp, temp2);
 }
 
 Token* commentCase(char* currentString, int startIndex) {
@@ -111,7 +117,9 @@ Token* commentCase(char* currentString, int startIndex) {
         }
         char* temp = (char*) calloc((i+1), sizeof(char));
         temp = strncpy(temp, currentString, i);
-        return newToken(temp, "Comment");
+    char* temp2 = (char*) calloc(30, sizeof(char));
+    strcpy(temp2, "Comment");
+        return newToken(temp, temp2);
     }
     else { // if the second character is *
         while(1) {
@@ -130,7 +138,9 @@ Token* commentCase(char* currentString, int startIndex) {
         }
         char* temp = (char*) calloc((i+1), sizeof(char));
         temp = strncpy(temp, currentString, i);
-        return newToken(temp, "Comment");
+    char* temp2 = (char*) calloc(30, sizeof(char));
+    strcpy(temp2, "Comment");
+        return newToken(temp, temp2);
     }
 }
 
@@ -149,7 +159,9 @@ Token* quoteCase(char* currentString, int startIndex) {
     	}
     	char* temp = (char*) calloc((i+1), sizeof(char));
     	temp = strncpy(temp, currentString, i);
-    	return newToken(temp, "String");
+    char* temp2 = (char*) calloc(30, sizeof(char));
+    strcpy(temp2, "String");
+    	return newToken(temp, temp2);
     }
     else{ // if the second character is "
     	while(1){
@@ -164,7 +176,9 @@ Token* quoteCase(char* currentString, int startIndex) {
     	}
     	char* temp = (char*) calloc((i+1), sizeof(char));
    	temp = strncpy(temp, currentString, i);
-    	return newToken(temp, "String");
+    char* temp2 = (char*) calloc(30, sizeof(char));
+    strcpy(temp2, "String");
+    	return newToken(temp, temp2);
     }
     return NULL;
 }
@@ -173,11 +187,8 @@ Token* quoteCase(char* currentString, int startIndex) {
 Token* specialCase(char* currentString, int startIndex) {
     int i = startIndex;
     char a = *(currentString + i);
-    char typeString[30];
+    char* typeString = (char*) calloc(30, sizeof(char));
     int j = 0;
-    for(j = 0; j < 30; j++) {
-        typeString[j] = '\0';
-    }
     int numChars = 1;
     while(1) {
         if(isspace(a)) {
@@ -453,9 +464,11 @@ Token* specialCase(char* currentString, int startIndex) {
         else if(a == '/') {
             if(*(currentString + i + 1) != '\0') {
                 if(*(currentString + i + 1) == '/') {
+			free(typeString);
 			return commentCase(currentString, i + 1);
                 }
 		if(*(currentString + i + 1) == '*') {
+			free(typeString);
 			return commentCase(currentString, i + 1);
                 }
 		if(*(currentString + i + 1) == '=') {
@@ -480,9 +493,11 @@ Token* specialCase(char* currentString, int startIndex) {
             break;
         }
         else if(a == '\'') {
+		free(typeString);
 	    return quoteCase(currentString, i+1);
         }
         else if(a == '\"') {
+		free(typeString);
 	    return quoteCase(currentString, i+1);
         }
         else {
@@ -511,7 +526,9 @@ Token* decimalCase(char* currentString, int startIndex) {
     }
     char* temp = (char*) calloc((i+1), sizeof(char));
     temp = strncpy(temp, currentString, i);
-    return newToken(temp, "Decimal Number");
+    char* temp2 = (char*) calloc(30, sizeof(char));
+    strcpy(temp2, "Decimal Number");
+    return newToken(temp, temp2);
 }
 
 Token* periodCase(char* currentString, int startIndex) {
@@ -557,7 +574,9 @@ Token* octalCase(char* currentString, int startIndex) {
     }
     char* temp = (char*) calloc((i+1), sizeof(char));
     temp = strncpy(temp, currentString, i );
-    return newToken(temp, "Octal Number");
+    char* temp2 = (char*) calloc(30, sizeof(char));
+    strcpy(temp2, "Octal Number");
+    return newToken(temp, temp2);
 }
 
 Token* hexCase(char* currentString, int startIndex) {
@@ -574,7 +593,9 @@ Token* hexCase(char* currentString, int startIndex) {
     }
     char* temp = (char*) calloc((i+1), sizeof(char));
     temp = strncpy(temp, currentString, i);
-    return newToken(temp, "Hexadecimal Number");
+    char* temp2 = (char*) calloc(30, sizeof(char));
+    strcpy(temp2, "Hexadecimal Number");
+    return newToken(temp, temp2);
 }
 
 Token* xCase(char* currentString, int startIndex) {
@@ -587,7 +608,9 @@ Token* xCase(char* currentString, int startIndex) {
     }
     char* temp = (char*) calloc((i+1), sizeof(char));
     temp = strncpy(temp, currentString, i);
-    return newToken(temp, "Decimal Number");
+    char* temp2 = (char*) calloc(30, sizeof(char));
+    strcpy(temp2, "Decimal Number");
+    return newToken(temp, temp2);
 }
 
 Token* zeroCase(char* currentString, int startIndex) {
@@ -611,7 +634,9 @@ Token* zeroCase(char* currentString, int startIndex) {
     }
     char* temp = (char*) calloc((i+2), sizeof(char));
     temp = strncpy(temp, currentString, i + 1);
-    return newToken(temp, "Decimal Number");
+    char* temp2 = (char*) calloc(30, sizeof(char));
+    strcpy(temp2, "Decimal Number");
+    return newToken(temp, temp2);
 
 }
 
@@ -673,7 +698,7 @@ TokenizerT* TKCreate(char* inputString) {
 
     while (strOffset < strlen(inputString)) {
 
-        char* currentStr = (char*) calloc(strlen(inputString) - strOffset, sizeof(char));
+        char* currentStr = (char*) calloc(strlen(inputString) - strOffset + 1, sizeof(char));
         strcpy(currentStr, &inputString[strOffset]);
 
         Token* temp = getInit(currentStr);
@@ -703,16 +728,19 @@ TokenizerT* TKCreate(char* inputString) {
  * You need to fill in this function as part of your implementation.
  */
 void TKDestroy( TokenizerT * tk ) {
+int count = 0;
     while (tk -> head -> next != NULL) {
         Token* temp = tk -> head;
         while (temp -> next -> next != NULL) {
             temp = temp -> next;
         }
 		free(temp -> next -> string);
+		free(temp -> next -> type);
         free(temp -> next);
 		temp -> next = NULL;
     }
 	free(tk-> head -> string);
+	free(tk-> head-> type);
 	free(tk -> head);
     free(tk);
 }

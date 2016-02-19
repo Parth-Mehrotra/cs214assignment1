@@ -3,6 +3,7 @@
  */
 
 #include <stdlib.h>
+#include "sorted-list.h"
 
 /*
  * Your list is used to store data items of an unknown type, which you need to sort.

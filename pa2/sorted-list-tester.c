@@ -44,6 +44,7 @@ int main() {
 	printf("%d\n", compareFunction(a, b));
 	printf("%d -> %d\n", n1, n2);
 
+	SLDestroy(slr);
 	free(slr);
 	return 0;
 }

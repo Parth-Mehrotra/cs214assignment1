@@ -64,6 +64,7 @@ SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df) {
  * SLDestroy destroys a SortedList, freeing all dynamically-allocated memory.
  */
 void SLDestroy(SortedListPtr list) {
+	while (SLRemove(list, list -> head -> data) != 0) {}
 }
 
 //===0.2: List Insert/Remove
@@ -138,7 +139,41 @@ int SLInsert(SortedListPtr list, void *newObj) {
  * SLRemove should return 1 on success, and 0 on failure.
  */
 int SLRemove(SortedListPtr list, void *newObj) {
-	return 0;
+	NodePtr temp = list -> head;
+	NodePtr toBeDeleted = NULL;
+
+	if (list -> cf(temp -> data, newObj) == 0) {
+		toBeDeleted = list -> head;
+		list -> head = list -> head -> next;
+		if (toBeDeleted -> numRef <= 1) {
+			NodeDestroy(list, list->head);
+		} else {
+			toBeDeleted -> numRef--;
+		}
+		return 1;
+	}
+
+	NodePtr nextToBeDeleted = NULL;
+	while (temp -> next != NULL) {
+		if (list -> cf(temp -> next -> data, newObj)) {
+			nextToBeDeleted = temp;
+			toBeDeleted = temp -> next;
+			break;
+		}
+		temp = temp -> next;
+	}
+
+	if (nextToBeDeleted == NULL) {
+		return 0;
+	}
+
+	nextToBeDeleted -> next = nextToBeDeleted -> next -> next;
+	if (toBeDeleted -> numRef <= 1) {
+		NodeDestroy(list, toBeDeleted);
+	} else {
+		toBeDeleted -> numRef--;
+	}
+	return 1;
 }
 
 /*

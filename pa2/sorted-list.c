@@ -53,7 +53,10 @@ void NodeDestroy(SortedListPtr list, NodePtr node){
  *   on success.
  */
 SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df) {
-	return NULL;
+	SortedListPtr ptr = (SortedListPtr) malloc(sizeof(struct SortedList));
+	ptr -> cf = cf;
+	ptr -> df = df;
+	return ptr;
 }
 
 /*

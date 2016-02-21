@@ -33,17 +33,6 @@
 /*
  * Sorted list type that will hold all the data to be sorted.
  */
-
-/*
-struct Node
-{
-	void* data;
-	NodePtr next;
-	int numRef;
-};
-typedef struct Node* NodePtr;
-*/
-
 void NodeDestroy(SortedListPtr list, NodePtr node){
 	if(node == NULL)
 		return;
@@ -51,16 +40,6 @@ void NodeDestroy(SortedListPtr list, NodePtr node){
 		list->df(node->data);
 	free(node);
 }
-
-/*
-struct SortedList
-{
-	NodePtr head;
-	CompareFunct cf;
-	DestructFuncT df;
-};
-typedef struct SortedList* SortedListPtr;
-*/
 
 /*
  * SLCreate creates a new, empty, 'SortedList'.
@@ -73,17 +52,14 @@ typedef struct SortedList* SortedListPtr;
  * SLCreate must return NULL if it does not succeed, and a non-NULL SortedListPtr
  *   on success.
  */
-
-SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df)
-{
+SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df) {
 	return NULL;
 }
 
 /*
  * SLDestroy destroys a SortedList, freeing all dynamically-allocated memory.
  */
-void SLDestroy(SortedListPtr list)
-{
+void SLDestroy(SortedListPtr list) {
 }
 
 //===0.2: List Insert/Remove
@@ -99,9 +75,7 @@ void SLDestroy(SortedListPtr list)
  *
  * Data item equality should be tested with the user's comparator function *
  */
-
-int SLInsert(SortedListPtr list, void *newObj)
-{
+int SLInsert(SortedListPtr list, void *newObj) {
 	return 0;
 }
 
@@ -113,31 +87,9 @@ int SLInsert(SortedListPtr list, void *newObj)
  *
  * SLRemove should return 1 on success, and 0 on failure.
  */
-
-int SLRemove(SortedListPtr list, void *newObj)
-{
+int SLRemove(SortedListPtr list, void *newObj) {
 	return 0;
 }
-
-//======1: SortedList Iterator============================
-//===1.1: SortedList Iterator Definition, Create/Destroy
-
-/*
- * SortListIterator allows a SortedList to be easily 'walked' through,
- *  item by item using repeated calls to 'SLNextItem'.
- * Each 'SLNextItem' call to a SortedListIterator should result in the 
- *  next consecutive item in a SortedList, from the beginning to the end.
- * A SortedListIterator provides a one-way traversal through all of a SortedList
- */
-
-/*
-struct SortedListIterator
-{
-	SortedListPtr list;
-	NodePrt current;
-};
-typedef struct SortedListIterator* SortedListIteratorPtr;
-*/
 
 /*
  * SLCreateIterator creates a SortedListIterator for the SortedList pointed to by 'list'.
@@ -146,9 +98,7 @@ typedef struct SortedListIterator* SortedListIteratorPtr;
  * SLCreateIterator should return a NULL SortedListIteratorPtr if it could not
  *  construct a SortedListIterator, or if the SortedListPtr parameter 'list' is NULL.
  */
-
-SortedListIteratorPtr SLCreateIterator(SortedListPtr list)
-{
+SortedListIteratorPtr SLCreateIterator(SortedListPtr list) {
 	if(list == NULL)
 		return NULL;
 	SortedListIteratorPtr temp = (SortedListIteratorPtr) malloc(sizeof(struct SortedListIterator));
@@ -165,9 +115,7 @@ SortedListIteratorPtr SLCreateIterator(SortedListPtr list)
  * SLDestroyIterator should destroy the SortedListIterator, but should NOT
  *  affect the list used to create the SortedListIterator in any way.
  */
-
-void SLDestroyIterator(SortedListIteratorPtr iter)
-{
+void SLDestroyIterator(SortedListIteratorPtr iter) {
 	if(iter == NULL)
 		return;
 	if(iter->current != NULL)
@@ -192,9 +140,7 @@ void SLDestroyIterator(SortedListIteratorPtr iter)
  *         If an item is removed from the list, making it shorter, be careful not
  *         to try to read and return an item off the end of the list.
  */
-
-void * SLNextItem(SortedListIteratorPtr iter)
-{
+void * SLNextItem(SortedListIteratorPtr iter) {
 	if(iter == NULL)
 		return NULL;
 	if(iter->current == NULL)
@@ -222,9 +168,7 @@ void * SLNextItem(SortedListIteratorPtr iter)
  *         If an items are removed from the list, making it shorter, be careful not
  *         to try to read and return an item off the end of the list.
  */
-
-void * SLGetItem( SortedListIteratorPtr iter )
-{
+void * SLGetItem( SortedListIteratorPtr iter ) {
 	if(iter == NULL)
 		return NULL;
 	if(iter->current == NULL)

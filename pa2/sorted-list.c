@@ -56,6 +56,7 @@ SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df) {
 	SortedListPtr ptr = (SortedListPtr) malloc(sizeof(struct SortedList));
 	ptr -> cf = cf;
 	ptr -> df = df;
+	ptr -> head = NULL;
 	return ptr;
 }
 
@@ -79,6 +80,49 @@ void SLDestroy(SortedListPtr list) {
  * Data item equality should be tested with the user's comparator function *
  */
 int SLInsert(SortedListPtr list, void *newObj) {
+	if (list -> head == NULL) {
+		list -> head = (NodePtr) malloc(sizeof(struct Node));
+		return 1;
+	}
+
+	NodePtr temp = list -> head;
+
+	if (list->cf(newObj, temp) > 0) {
+		list -> head = (NodePtr) malloc(sizeof(struct Node));
+		list -> head -> data = newObj;
+		list -> head -> next = temp;
+		list -> head -> numRef = 1;
+		return 1;
+	}
+
+	while (temp -> next != NULL) {
+		if (list -> cf(temp, newObj) == 0) {
+			return 0;
+		} 
+
+		if ((list -> cf(temp, newObj) > 0) && (list -> cf(newObj, temp->next) > 0)) {
+			NodePtr temp2 = temp -> next;
+			temp -> next = (NodePtr) malloc(sizeof(struct Node));
+			temp -> next -> data = newObj;
+			temp -> next -> next = temp2;
+			temp -> next -> numRef = 1;
+		} else {
+			temp = temp -> next;
+		}
+	}
+
+	//Could be the last element
+	if (list -> cf(temp, newObj) == 0) {
+		return 0;
+	}
+
+	if (list -> cf(temp, newObj) > 0) {
+		temp -> next = (NodePtr) malloc(sizeof(struct Node));
+		temp -> next -> data = newObj;
+		temp -> next -> next = NULL;
+		temp -> next -> numRef = 1;
+		return 1;
+	}
 	return 0;
 }
 

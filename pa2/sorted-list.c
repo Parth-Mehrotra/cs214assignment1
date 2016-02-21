@@ -90,7 +90,7 @@ int SLInsert(SortedListPtr list, void *newObj) {
 
 	NodePtr temp = list -> head;
 
-	if (list->cf(newObj, temp) > 0) {
+	if (list->cf(newObj, temp -> data) > 0) {
 		list -> head = (NodePtr) malloc(sizeof(struct Node));
 		list -> head -> data = newObj;
 		list -> head -> next = temp;
@@ -99,11 +99,11 @@ int SLInsert(SortedListPtr list, void *newObj) {
 	}
 
 	while (temp -> next != NULL) {
-		if (list -> cf(temp, newObj) == 0) {
+		if (list -> cf(temp -> data, newObj) == 0) {
 			return 0;
 		} 
 
-		if ((list -> cf(temp, newObj) > 0) && (list -> cf(newObj, temp->next) > 0)) {
+		if ((list -> cf(temp -> data, newObj) > 0) && (list -> cf(newObj, temp->next->data) > 0)) {
 			NodePtr temp2 = temp -> next;
 			temp -> next = (NodePtr) malloc(sizeof(struct Node));
 			temp -> next -> data = newObj;
@@ -115,11 +115,11 @@ int SLInsert(SortedListPtr list, void *newObj) {
 	}
 
 	//Could be the last element
-	if (list -> cf(temp, newObj) == 0) {
+	if (list -> cf(temp -> data, newObj) == 0) {
 		return 0;
 	}
 
-	if (list -> cf(temp, newObj) > 0) {
+	if (list -> cf(temp -> data, newObj) > 0) {
 		temp -> next = (NodePtr) malloc(sizeof(struct Node));
 		temp -> next -> data = newObj;
 		temp -> next -> next = NULL;

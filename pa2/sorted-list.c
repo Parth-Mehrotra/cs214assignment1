@@ -64,7 +64,7 @@ SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df) {
  * SLDestroy destroys a SortedList, freeing all dynamically-allocated memory.
  */
 void SLDestroy(SortedListPtr list) {
-	while (SLRemove(list, list -> head -> data) != 0) {}
+	while (list -> head != NULL && SLRemove(list, list -> head -> data) != 0) {}
 }
 
 //===0.2: List Insert/Remove

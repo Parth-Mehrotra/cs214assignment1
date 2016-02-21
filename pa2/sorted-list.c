@@ -82,6 +82,9 @@ void SLDestroy(SortedListPtr list) {
 int SLInsert(SortedListPtr list, void *newObj) {
 	if (list -> head == NULL) {
 		list -> head = (NodePtr) malloc(sizeof(struct Node));
+		list -> head -> data = newObj;
+		list -> head -> numRef = 1;
+		list -> head -> next = NULL;
 		return 1;
 	}
 

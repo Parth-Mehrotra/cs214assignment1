@@ -39,17 +39,14 @@ typedef void (*DestructFuncT)( void * );
 /*
  * Sorted list type that will hold all the data to be sorted.
  */
-
-struct Node
-{
+struct Node {
 	void* data;
 	struct Node* next;
 	int numRef;
 };
 typedef struct Node* NodePtr;
 
-struct SortedList
-{
+struct SortedList {
 	NodePtr head;
 	CompareFuncT cf;
 	DestructFuncT df;
@@ -69,7 +66,6 @@ void NodeDestroy(SortedListPtr, NodePtr);
  * SLCreate must return NULL if it does not succeed, and a non-NULL SortedListPtr
  *   on success.
  */
-
 SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df);
 
 
@@ -93,7 +89,6 @@ void SLDestroy(SortedListPtr list);
  *
  * Data item equality should be tested with the user's comparator function *
  */
-
 int SLInsert(SortedListPtr list, void *newObj);
 
 
@@ -105,7 +100,6 @@ int SLInsert(SortedListPtr list, void *newObj);
  *
  * SLRemove should return 1 on success, and 0 on failure.
  */
-
 int SLRemove(SortedListPtr list, void *newObj);
 
 
@@ -135,7 +129,6 @@ typedef struct SortedListIterator* SortedListIteratorPtr;
  * SLCreateIterator should return a NULL SortedListIteratorPtr if it could not
  *  construct a SortedListIterator, or if the SortedListPtr parameter 'list' is NULL.
  */
-
 SortedListIteratorPtr SLCreateIterator(SortedListPtr list);
 
 
@@ -145,10 +138,7 @@ SortedListIteratorPtr SLCreateIterator(SortedListPtr list);
  * SLDestroyIterator should destroy the SortedListIterator, but should NOT
  *  affect the list used to create the SortedListIterator in any way.
  */
-
 void SLDestroyIterator(SortedListIteratorPtr iter);
-
-
 
 //===1.2: SortedList Iterator Get/Next Operations
 
@@ -164,9 +154,7 @@ void SLDestroyIterator(SortedListIteratorPtr iter);
  *         If an item is removed from the list, making it shorter, be careful not
  *         to try to read and return an item off the end of the list.
  */
-
 void * SLNextItem(SortedListIteratorPtr iter);
-
 
 /*
  * SLGetItem should return a pointer to the current data item
@@ -181,9 +169,6 @@ void * SLNextItem(SortedListIteratorPtr iter);
  *         If an items are removed from the list, making it shorter, be careful not
  *         to try to read and return an item off the end of the list.
  */
-
 void * SLGetItem( SortedListIteratorPtr iter );
-
-
 
 #endif

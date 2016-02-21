@@ -22,13 +22,27 @@ void destructFunction(void* arg1) {
 }
 
 int main() {
+	int (*cf)(void*, void*) = &compareFunction;
+	void (*df)(void*) = &destructFunction;
+
 	data* a = (data*) malloc(sizeof(data));
 	a -> value = 10;
 	data* b = (data*) malloc(sizeof(data));
 	b -> value = 30;
 
-	printf("compareFunct(10, 2) = %d\n", compareFunction(a, b));
-	destructFunction(a);
-	printf("%d\n", a->value);
+	SortedListPtr slr = SLCreate(cf, df);
+	
+	SLInsert(slr, a);
+	SLInsert(slr, b);
+
+	data* d1 = slr -> head -> data;
+	int n1 = d1 -> value;
+
+	data* d2 = slr -> head -> next -> data;
+	int n2 = d2 -> value;
+	
+	printf("%d -> %d\n", n1, n2);
+
+	free(slr);
 	return 0;
 }

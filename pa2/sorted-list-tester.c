@@ -33,10 +33,13 @@ int main() {
 	SortedListPtr slr = SLCreate(cf, df);
 	
 	SLInsert(slr, a);
+	SLInsert(slr, b);
 
 	data* d1 = slr -> head -> data;
 	int n1 = d1 -> value;
 
+	data* d2 = slr -> head -> next -> data;
+	int n2 = d2 -> value;
 	
 	printf("%d\n", compareFunction(a, b));
 	printf("%d -> %d\n", n1, n2);

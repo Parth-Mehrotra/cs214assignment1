@@ -13,4 +13,4 @@ sorted-list.o: sorted-list.c
 	$(CC) $(CFLAGS) -c sorted-list.c
 
 clean: 
-	rm -rf *.out sorted_list
+	rm -rf *.o sorter

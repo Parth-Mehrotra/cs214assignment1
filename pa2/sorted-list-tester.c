@@ -28,7 +28,7 @@ int main() {
 	b -> value = 30;
 
 	printf("compareFunct(10, 2) = %d\n", compareFunction(a, b));
-	free(a);
+	destructFunction(a);
 	printf("%d\n", a->value);
 	return 0;
 }

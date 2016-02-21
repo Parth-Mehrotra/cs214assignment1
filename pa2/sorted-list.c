@@ -76,7 +76,7 @@ typedef struct SortedList* SortedListPtr;
 
 SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df)
 {
-	
+	return NULL;
 }
 
 /*
@@ -84,7 +84,6 @@ SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df)
  */
 void SLDestroy(SortedListPtr list)
 {
-
 }
 
 //===0.2: List Insert/Remove
@@ -103,7 +102,7 @@ void SLDestroy(SortedListPtr list)
 
 int SLInsert(SortedListPtr list, void *newObj)
 {
-
+	return 0;
 }
 
 /*
@@ -117,7 +116,7 @@ int SLInsert(SortedListPtr list, void *newObj)
 
 int SLRemove(SortedListPtr list, void *newObj)
 {
-
+	return 0;
 }
 
 //======1: SortedList Iterator============================
@@ -152,7 +151,7 @@ SortedListIteratorPtr SLCreateIterator(SortedListPtr list)
 {
 	if(list == NULL)
 		return NULL;
-	SortedListIteratorPtr temp = (SortedListIteratorPtr) malloc(sizeof(SortedListIterator));
+	SortedListIteratorPtr temp = (SortedListIteratorPtr) malloc(sizeof(struct SortedListIterator));
 	temp->list = list;
 	temp->current = list->head;
 	if(temp->current != NULL)

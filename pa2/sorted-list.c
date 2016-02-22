@@ -65,6 +65,7 @@ SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df) {
  */
 void SLDestroy(SortedListPtr list) {
 	while (list -> head != NULL && SLRemove(list, list -> head -> data) != 0) {}
+	free(list);
 }
 
 //===0.2: List Insert/Remove
@@ -146,9 +147,11 @@ int SLRemove(SortedListPtr list, void *newObj) {
 		toBeDeleted = list -> head;
 		list -> head = list -> head -> next;
 		if (toBeDeleted -> numRef <= 1) {
-			NodeDestroy(list, list->head);
+			NodeDestroy(list, toBeDeleted);
 		} else {
 			toBeDeleted -> numRef--;
+			if(toBeDeleted->next != NULL)
+				toBeDeleted->next->numRef++;
 		}
 		return 1;
 	}
@@ -172,6 +175,9 @@ int SLRemove(SortedListPtr list, void *newObj) {
 		NodeDestroy(list, toBeDeleted);
 	} else {
 		toBeDeleted -> numRef--;
+		if(toBeDeleted->next != NULL)
+				toBeDeleted->next->numRef++;
+
 	}
 	return 1;
 }
@@ -190,7 +196,9 @@ SortedListIteratorPtr SLCreateIterator(SortedListPtr list) {
 	temp->list = list;
 	temp->current = list->head;
 	if(temp->current != NULL)
+	{
 		temp->current->numRef++;
+	}
 	return temp;
 }
 
@@ -206,7 +214,23 @@ void SLDestroyIterator(SortedListIteratorPtr iter) {
 	if(iter->current != NULL)
 	{
 		if(iter->current->numRef == 1)
+		{
+			NodePtr temp = iter->current->next;
 			NodeDestroy(iter->list, iter->current);
+			while(temp != NULL)
+			{
+				if(temp->numRef != 1)
+				{
+					temp->numRef--;
+					break;
+				}
+				NodePtr temp2 = temp->next;
+				NodeDestroy(iter->list, temp);
+				temp = temp2;
+			}
+		}
+		else
+			iter->current->numRef--;
 	}
 	free(iter);
 }
@@ -237,6 +261,7 @@ void * SLNextItem(SortedListIteratorPtr iter) {
 	iter->current = temp;
 	if(iter->current == NULL)
 		return NULL;
+	iter->current->numRef++;
 	return iter->current->data;
 }
 

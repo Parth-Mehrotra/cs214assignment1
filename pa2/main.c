@@ -18,7 +18,8 @@ int compareFunction(void* arg1, void* arg2) {
 }
 
 void destructFunction(void* arg1) {
-	free(arg1);
+	data* a = arg1;
+	free(a);
 }
 
 int main() {
@@ -29,22 +30,19 @@ int main() {
 	a -> value = 10;
 	data* b = (data*) malloc(sizeof(data));
 	b -> value = 30;
+	data* c = (data*) malloc(sizeof(data));
+	c -> value = 50;
 
 	SortedListPtr slr = SLCreate(cf, df);
 	
 	SLInsert(slr, a);
 	SLInsert(slr, b);
+	SLInsert(slr, c);
 
-	data* d1 = slr -> head -> data;
-	int n1 = d1 -> value;
-
-	data* d2 = slr -> head -> next -> data;
-	int n2 = d2 -> value;
-	
-	printf("%d\n", compareFunction(a, b));
-	printf("%d -> %d\n", n1, n2);
+	SortedListIteratorPtr iter = SLCreateIterator(slr);
+	printf("%d\n", *(int*)SLGetItem(iter));
 
 	SLDestroy(slr);
-	free(slr);
+	SLDestroyIterator(iter);
 	return 0;
 }

@@ -3,11 +3,11 @@ CFLAGS = -g -Wall -Werror
 
 default: sorter
 
-sorter: sorted-list.o sorted-list-tester.o
-	$(CC) $(CFLAGS) -o sorter sorted-list.o	sorted-list-tester.o
+sorter: sorted-list.o main.o
+	$(CC) $(CFLAGS) -o sorter sorted-list.o	main.o
 
-sorted-list-tester.o: sorted-list-tester.c
-	$(CC) $(CFLAGS) -c sorted-list-tester.c
+main.o: main.c
+	$(CC) $(CFLAGS) -c main.c
 
 sorted-list.o: sorted-list.c
 	$(CC) $(CFLAGS) -c sorted-list.c

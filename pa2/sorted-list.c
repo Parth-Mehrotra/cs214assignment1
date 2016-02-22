@@ -158,7 +158,7 @@ int SLRemove(SortedListPtr list, void *newObj) {
 
 	NodePtr nextToBeDeleted = NULL;
 	while (temp -> next != NULL) {
-		if (list -> cf(temp -> next -> data, newObj)) {
+		if (list -> cf(temp -> next -> data, newObj) == 0) {
 			nextToBeDeleted = temp;
 			toBeDeleted = temp -> next;
 			break;
@@ -256,12 +256,16 @@ void * SLNextItem(SortedListIteratorPtr iter) {
 		return NULL;
 	NodePtr temp = iter->current->next;
 	iter->current->numRef--;
-	if(iter->current->numRef == 0)
+	int wasDestroyed = 0;
+	if(iter->current->numRef == 0){
+		wasDestroyed = 1;
 		NodeDestroy(iter->list, iter->current);
+	}
 	iter->current = temp;
 	if(iter->current == NULL)
 		return NULL;
-	iter->current->numRef++;
+	if(wasDestroyed == 0)
+		iter->current->numRef++;
 	return iter->current->data;
 }
 

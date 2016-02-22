@@ -1,0 +1,51 @@
+Every interger listed here is actually an int stored as a data member within a struct.
+
+Create an empty list:
+NULL
+
+Add 1/2/3/4 elements:
+Insert 10: 10
+Insert 30: 30 -> 10
+Insert 50: 50 -> 30 -> 10
+Insert 5:  50 -> 30 -> 10 -> 5
+
+Remove 1/2/3/4 elements:
+Remove 50: 30 -> 10 -> 5
+Remove 10: 30 -> 5
+Remove 5:  30
+Remove 30: NULL
+
+Create an Iterator on List: 50 -> 30 -> 10 -> 5
+SLGetItem: 50
+SLNextItem: 30
+SLNextItem: 10
+SLNextItem: 5
+SLGetItem: 5
+SLNextItem: NULL
+
+Ability to access iterator Node after list removal: 50 -> 30 -> 10 -> 5
+Iterator points to 30.
+SLRemove(30)
+SLGetItem: 30
+SLNextItem: 10
+SLRemove(5)
+SLNextItem: NULL
+NO MEMORY LEAKS.
+
+More Memory Leak Testing: 50 -> 30 -> 10 -> 5
+Created 3 Iterators on 50:
+SLDestroy
+SLDestroyIterator(iterator1)
+SLDestroyIterator(iterator2)
+SLDestroyIterator(iterator3)
+NO MEMORY LEAKS
+
+50 -> 30 -> 10 -> 5
+Create 1 Iterator on 30
+Create 1 Iterator on 10
+Create 1 Iterator on 5
+SLDestroy
+SLDestroyIterator(iterator1)
+SLDestroyIterator(iterator2)
+SLDestroyIterator(iterator3)
+NO MEMORY LEAKS

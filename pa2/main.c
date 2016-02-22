@@ -32,17 +32,28 @@ int main() {
 	b -> value = 30;
 	data* c = (data*) malloc(sizeof(data));
 	c -> value = 50;
-
+	data* d = (data*) malloc(sizeof(data));
+	d -> value = 5;
 	SortedListPtr slr = SLCreate(cf, df);
 	
 	SLInsert(slr, a);
 	SLInsert(slr, b);
 	SLInsert(slr, c);
+	SLInsert(slr, d);
 
 	SortedListIteratorPtr iter = SLCreateIterator(slr);
-	printf("%d\n", *(int*)SLGetItem(iter));
+	SortedListIteratorPtr iter2 = SLCreateIterator(slr);
+	SortedListIteratorPtr iter3 = SLCreateIterator(slr);
+	SLNextItem(iter);
+	SLNextItem(iter2);
+	SLNextItem(iter2);
+	SLNextItem(iter3);
+	SLNextItem(iter3);
+	SLNextItem(iter3);
 
 	SLDestroy(slr);
 	SLDestroyIterator(iter);
+	SLDestroyIterator(iter2);
+	SLDestroyIterator(iter3);
 	return 0;
 }

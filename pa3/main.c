@@ -5,6 +5,6 @@
 
 int main(int argc, char** argv)
 {
-	void* thing = malloc(5001);
+	void* thing = malloc(5);
 	return 0;
 }

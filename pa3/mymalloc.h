@@ -15,6 +15,6 @@ typedef struct mementry_T{
 } mementry;
 typedef mementry* mementryPtr;
 
-void* mymalloc(int size, char* errorLocation, int errorLine);
+void* mymalloc(unsigned int size, char* errorLocation, int errorLine);
 
 #endif

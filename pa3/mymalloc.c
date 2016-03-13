@@ -12,7 +12,7 @@ void createMementry(mementryPtr memHead, int size, mementryPtr prev, mementryPtr
 {
 	memset(memHead->confirmCode, '\0', 11);
 	strcpy(memHead->confirmCode, "dEL8zWd9Ik");
-	memHead->allocatedMemory = (memHead+sizeof(mementry));
+	memHead->allocatedMemory = ((void*)memHead)+sizeof(mementry);
 	memHead->sizeOfAllocation = size;
 	memHead->isFree = 0;
 	memHead->prev = prev;
@@ -51,6 +51,8 @@ void* mymalloc(unsigned int size, char* errorLocation, int errorLine)
 			if(tempMemoryLeft >= (sizeof(mementry) + size))
 			{
 				createMementry(memHead, size, memPrev, memNext);
+				if(memPrev != NULL)
+					memPrev->next = memHead;
 				return memHead->allocatedMemory;
 			}
 			fprintf(stderr, "No more memory available.\n(Error at %s, line %d)\n", errorLocation, errorLine);
@@ -66,7 +68,7 @@ void* mymalloc(unsigned int size, char* errorLocation, int errorLine)
 			// mementry that manages the unused space
 			if(memHead->sizeOfAllocation > size + sizeof(mementry))
 			{
-				void* voidEntry = (void*)(memHead + sizeof(mementry) + size);
+				void* voidEntry = (void*)memHead + sizeof(mementry) + size;
 				mementryPtr tempEntry = (mementryPtr) voidEntry;
 				createMementry(tempEntry, memHead->sizeOfAllocation - size - sizeof(mementry), memHead, memHead->next);
 				tempEntry->isFree = 1;
@@ -81,11 +83,11 @@ void* mymalloc(unsigned int size, char* errorLocation, int errorLine)
 		}
 		if(memHead->next != NULL)
 			memHead = memHead->next;
-		else if((void*)(memHead + sizeof(mementry) + memHead->sizeOfAllocation) <= (void*)(myarray+5000-sizeof(mementry)))
+		else if((void*)memHead + sizeof(mementry) + memHead->sizeOfAllocation <= (void*)myarray + 5000 - sizeof(mementry))
 		{
 			memPrev = memHead;
 			memNext = NULL;
-			void* voidHead = (void*)(memHead + sizeof(mementry) + memHead->sizeOfAllocation);
+			void* voidHead = (void*)memHead + sizeof(mementry) + memHead->sizeOfAllocation;
 			memHead = (mementryPtr) voidHead;
 		}
 		else
@@ -93,6 +95,6 @@ void* mymalloc(unsigned int size, char* errorLocation, int errorLine)
 			fprintf(stderr, "No more memory available.\n(Error at %s, line %d)\n", errorLocation, errorLine);
 			return NULL;
 		}
-		int tempMemoryLeft = (void*)(myarray+5000) - (void*)(memHead);	
+		int tempMemoryLeft = (void*)myarray+5000 - (void*)memHead;	
 	}
 }

@@ -95,6 +95,6 @@ void* mymalloc(unsigned int size, char* errorLocation, int errorLine)
 			fprintf(stderr, "No more memory available.\n(Error at %s, line %d)\n", errorLocation, errorLine);
 			return NULL;
 		}
-		int tempMemoryLeft = (void*)myarray+5000 - (void*)memHead;	
+		tempMemoryLeft = (void*)myarray+5000 - (void*)memHead;	
 	}
 }

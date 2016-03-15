@@ -70,7 +70,7 @@ void* mymalloc(unsigned int size, char* errorLocation, int errorLine)
 				mementryPtr tempEntry = (mementryPtr) voidEntry;
 				createMementry(tempEntry, memHead->sizeOfAllocation - size - sizeof(mementry), memHead, memHead->next);
 				createMementry(memHead, size, memPrev, tempEntry);
-				free(tempEntry);
+				free((void*)tempEntry + sizeof(mementry));
 				return memHead->allocatedMemory;
 			}
 			else
@@ -102,7 +102,11 @@ void myfree(void* ptr, char* errorLocation, int errorLine) {
 
 	//Could this be a valid pointer
 	if (!((void*)myarray <= (void*)mem && (void*)mem < (void*)(myarray+5000-sizeof(mementry)))) {
+<<<<<<< HEAD
 		fprintf(stderr, "Invalid pointer, out of range. Aborting...\n(Error at %s, line%d)\n", errorLocation, errorLine);
+=======
+		fprintf(stderr, "Invalid pointer. Aborting...\n(Error at %s, line%d)\n", errorLocation, errorLine);
+>>>>>>> f6e49a853e19e35f4e11d4256396d83540fcc8bc
 		return;
 	}
 

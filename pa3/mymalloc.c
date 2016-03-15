@@ -101,8 +101,8 @@ void myfree(void* ptr, char* errorLocation, int errorLine) {
 	mementryPtr mem = (mementryPtr)(ptr - sizeof(mementry));
 
 	//Could this be a valid pointer
-	if ((void*)myarray <= (void*)mem && (void*)mem < (void*)(myarray+5000-sizeof(mementry))) {
-		fprintf(stderr, "Invalid pointer. Aborting...\n(Error at %s, line%d)\n", errorLocation, errorLine);
+	if (!((void*)myarray <= (void*)mem && (void*)mem < (void*)(myarray+5000-sizeof(mementry)))) {
+		fprintf(stderr, "Invalid pointer, out of range. Aborting...\n(Error at %s, line%d)\n", errorLocation, errorLine);
 		return;
 	}
 

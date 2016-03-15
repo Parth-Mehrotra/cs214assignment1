@@ -2,12 +2,19 @@
 #include<stdlib.h>
 
 #include "mymalloc.h"
-#include "myfree.h"
 
 int main(int argc, char** argv)
 {
-	void* thing = malloc(50);
-	void* thing2 = malloc(150);
-	void* thing3 = malloc(100);
+	printf("Double free example:\n");
+	void* doubleFreeExample = malloc(50);
+	free(doubleFreeExample);
+	free(doubleFreeExample);
+
+	printf("Outofrange pointer free\n");
+	void* invPointerFree = malloc(10);
+	free(invPointerFree+50000);
+
+	printf("Invalid pointer free\n");
+	free(invPointerFree+2);
 	return 0;
 }

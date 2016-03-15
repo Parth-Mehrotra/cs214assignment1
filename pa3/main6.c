@@ -5,8 +5,7 @@
 
 int main(int argc, char** argv)
 {
-	void* thing = malloc(50);
-	void* thing2 = malloc(150);
-	void* thing3 = malloc(100);
+	void* thing = NULL;
+	free(thing);
 	return 0;
 }

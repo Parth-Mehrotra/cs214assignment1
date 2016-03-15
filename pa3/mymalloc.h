@@ -3,8 +3,9 @@
 
 #define malloc(x) mymalloc(x,__FILE__,__LINE__)
 
-static char myarray[5000];
-int memoryLeft = 5000;
+#define free(x) myfree(x,__FILE__,__LINE__)
+
+void myfree(void* ptr, char* errorLocation, int errorLine);
 
 typedef struct mementry_T {
 

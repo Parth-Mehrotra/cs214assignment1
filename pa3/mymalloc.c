@@ -6,7 +6,6 @@
 #include"mymalloc.h"
 
 static char myarray[5000];
-int memoryLeft = 5000;
 
 void createMementry(mementryPtr memHead, int size, mementryPtr prev, mementryPtr next)
 {
@@ -17,7 +16,6 @@ void createMementry(mementryPtr memHead, int size, mementryPtr prev, mementryPtr
 	memHead->isFree = 0;
 	memHead->prev = prev;
 	memHead->next = next;
-	memoryLeft -= sizeof(mementry) + size;
 }
 
 void* mymalloc(unsigned int size, char* errorLocation, int errorLine)
@@ -32,7 +30,7 @@ void* mymalloc(unsigned int size, char* errorLocation, int errorLine)
 		fprintf(stderr, "Cannot allocate 0 memory.\n(Error at %s, line %d)\n", errorLocation, errorLine);
 		return NULL;
 	}
-	if((sizeof(mementry) + size) > memoryLeft)
+	if((sizeof(mementry) + size) > 5000)
 	{
 		fprintf(stderr, "Memory size exceeded.\n(Error at %s, line %d)\n", errorLocation, errorLine);
 		return NULL;	
@@ -71,8 +69,8 @@ void* mymalloc(unsigned int size, char* errorLocation, int errorLine)
 				void* voidEntry = (void*)memHead + sizeof(mementry) + size;
 				mementryPtr tempEntry = (mementryPtr) voidEntry;
 				createMementry(tempEntry, memHead->sizeOfAllocation - size - sizeof(mementry), memHead, memHead->next);
-				tempEntry->isFree = 1;
 				createMementry(memHead, size, memPrev, tempEntry);
+				free(tempEntry);
 				return memHead->allocatedMemory;
 			}
 			else
@@ -100,10 +98,10 @@ void* mymalloc(unsigned int size, char* errorLocation, int errorLine)
 }
 
 void myfree(void* ptr, char* errorLocation, int errorLine) {
-	mementryPtr mem = (mementryPtr) ptr;
+	mementryPtr mem = (mementryPtr)(ptr - sizeof(mementry));
 
 	//Could this be a valid pointer
-	if (myarray < mem < myarray+5000) {
+	if ((void*)myarray <= (void*)mem && (void*)mem < (void*)(myarray+5000-sizeof(mementry))) {
 		fprintf(stderr, "Invalid pointer. Aborting...\n(Error at %s, line%d)\n", errorLocation, errorLine);
 		return;
 	}

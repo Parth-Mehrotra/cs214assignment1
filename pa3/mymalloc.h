@@ -3,7 +3,7 @@
 
 #define malloc(x) mymalloc(x,__FILE__,__LINE__)
 
-#define free(x) myfree(x,__FILE__,__LINE__)
+#define free(x) myfree((void*)(x),__FILE__,__LINE__)
 
 void myfree(void* ptr, char* errorLocation, int errorLine);
 

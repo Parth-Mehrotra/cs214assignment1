@@ -5,9 +5,6 @@
 
 #include"mymalloc.h"
 
-static char myarray[5000];
-int memoryLeft = 5000;
-
 void createMementry(mementryPtr memHead, int size, mementryPtr prev, mementryPtr next)
 {
 	memset(memHead->confirmCode, '\0', 11);

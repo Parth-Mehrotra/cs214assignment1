@@ -1,7 +1,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-#include"mymalloc.h"
+#include "mymalloc.h"
+#include "myfree.h"
 
 int main(int argc, char** argv)
 {

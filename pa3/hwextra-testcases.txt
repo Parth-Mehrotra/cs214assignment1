@@ -1,0 +1,72 @@
+LIST OF TESTCASES:
+
+main1.c:
+	GOAL: Allocate three blocks of memory.
+	
+	malloc(50): [notFree]
+	malloc(150): [notFree] -> [notFree]
+	malloc(100): [notFree] -> [notFree] -> [notFree]
+
+main2.c: 
+	GOAL: Free a block of memory, reuse it, and assign a mementry to manage the unused memory.
+	
+	thing = malloc(50): [notFree: size 50]
+	thing2 = malloc(150): [notFree: size 50] -> [notFree: size 150]
+	free(thing2): [notFree: size 50] -> [Free: size 150]
+	thing3 = malloc(100): [notFree: size 50] -> [notFree: Size 100] -> [Free: size 50 - sizeof(mementry)]
+
+main3.c: 
+	GOAL: Free a block of memory, reuse it completely, since the unused memory that is left is unable 
+		to hold another mementry.
+	
+	thing = malloc(50): [notFree: size 50]
+	thing2 = malloc(150): [notFree: size 50] -> [notFree: size 150]
+	free(thing2): [notFree: size 50] -> [Free: size 150]
+	thing3 = malloc(110): [notFree: size 50] -> [notFree: Size 150]
+
+main4.c: 
+	GOAL: Testing to see if the program knows when it does not have any memory left.
+	
+	thing = malloc(900): [notFree: size 900]
+	thing2 = malloc(2900): [notFree: size 900] -> [notFree: size 2900]
+	thing3 = malloc(900): [notFree: size 900] -> [notFree: size 2900] -> [notFree: size 900]
+	free(thing): [Free: size 900] -> [notFree: size 2900] -> [notFree: size 900]
+	free(thing3): [Free: size 900] -> [notFree: size 2900] -> [Free: size 900]
+	thing4 = malloc(2000): [Free: size 900] -> [notFree: size 2900] -> [Free: size 900] 
+		CANNOT ALLOCATE: NO MORE ROOM
+
+main5.c: 
+	GOAL: Testing the merging of adjacent Free mementries.
+	
+	thing = malloc(1000): [notFree: size 1000]
+	thing2 = malloc(1000): [notFree: size 1000] -> [notFree: size 1000]
+	free(thing): [Free: size 1000] -> [notFree: size 1000]
+	free(thing2): [Free: size 2000]
+	thing3 = malloc(1000): [notFree: size 1000] -> [Free: size 1000]
+
+main6.c: 
+	GOAL: Freeing memory that is not allocated.
+	
+	thing = NULL
+	free(thing): ERROR
+
+main7.c: 
+	GOAL: Giving a pointer that was not returned by malloc.
+	
+	thing = malloc(1000)
+	free(thing + 10): ERROR
+
+main8.c: 
+	GOAL: Double Free.
+	
+	thing = malloc(1000)
+	free(thing)
+	free(thing): ERROR
+
+main9.c: 
+	GOAL: Reallocating a pointer that was freed.
+	
+	thing = malloc(1000)
+	free(thing)
+	thing = malloc(1000)
+	free(thing)

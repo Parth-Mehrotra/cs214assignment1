@@ -45,4 +45,4 @@ mymalloc.o: mymalloc.c
 	$(CC) $(CFLAGS) -c mymalloc.c
 
 clean: 
-	rm -rf *.o mem_test*
+	rm -rf *.o test*

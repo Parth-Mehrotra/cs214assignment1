@@ -4,15 +4,15 @@ CFLAGS = -g
 default: tests
 
 tests: mymalloc.o main1.o main2.o main3.o main4.o main5.o main6.o main7.o main8.o main9.o
-	$(CC) $(CFLAGS) -o mem_test_1 main1.o mymalloc.o
-	$(CC) $(CFLAGS) -o mem_test_2 main2.o mymalloc.o
-	$(CC) $(CFLAGS) -o mem_test_3 main3.o mymalloc.o
-	$(CC) $(CFLAGS) -o mem_test_4 main4.o mymalloc.o
-	$(CC) $(CFLAGS) -o mem_test_5 main5.o mymalloc.o
-	$(CC) $(CFLAGS) -o mem_test_6 main6.o mymalloc.o
-	$(CC) $(CFLAGS) -o mem_test_7 main7.o mymalloc.o
-	$(CC) $(CFLAGS) -o mem_test_8 main8.o mymalloc.o
-	$(CC) $(CFLAGS) -o mem_test_9 main9.o mymalloc.o
+	$(CC) $(CFLAGS) -o test1 main1.o mymalloc.o
+	$(CC) $(CFLAGS) -o test2 main2.o mymalloc.o
+	$(CC) $(CFLAGS) -o test3 main3.o mymalloc.o
+	$(CC) $(CFLAGS) -o test4 main4.o mymalloc.o
+	$(CC) $(CFLAGS) -o test5 main5.o mymalloc.o
+	$(CC) $(CFLAGS) -o test6 main6.o mymalloc.o
+	$(CC) $(CFLAGS) -o test7 main7.o mymalloc.o
+	$(CC) $(CFLAGS) -o test8 main8.o mymalloc.o
+	$(CC) $(CFLAGS) -o test9 main9.o mymalloc.o
 
 main1.o: main1.c
 	$(CC) $(CFLAGS) -c main1.c

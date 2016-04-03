@@ -1,0 +1,54 @@
+/*
+ * sorted-list.c
+ */
+
+#include <stdlib.h>
+#include "sorted-list.h"
+
+int SLInsert(hashNodePtr hashNode, char* filePath) {
+	if (hashNode->Ptr == NULL) {
+		hashNode->Ptr = (NodePtr) malloc(sizeof(struct Node));
+		hashNode->Ptr -> filePath = filePath;
+		hashNode->Ptr -> frequency = 1;
+		return 1;
+	}
+
+	NodePtr temp = hashNode->Ptr;
+	NodePtr prev = NULL;
+
+	while(temp != NULL && temp->filePath != filePath)
+	{
+		prev = temp;
+		temp = temp->next;
+	}
+
+	if(temp == NULL)
+	{
+		prev->next = (NodePtr) malloc(sizeof(struct Node));
+		prev->next->filePath = filePath;
+		prev->next->frequency = 1;
+	}
+	else
+	{
+		temp->frequency++;
+		if(prev != NULL && prev->frequency < temp->frequency)
+		{
+			prev->next = temp->next;
+			NodePtr trav = hashNode->ptr;
+			if(trav->frequency < temp->frequency)
+			{
+				temp->next = trav;
+				hashNode->ptr = temp;
+				return 1;
+			}
+			while(trav->next != NULL && trav->next->frequency > temp->frequency)
+			{
+				trav = trav->next;
+			}
+			temp->next = trav->next;
+			trav->next = temp;
+			return 1;
+		}
+	}
+	return 1;
+}

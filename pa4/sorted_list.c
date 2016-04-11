@@ -3,7 +3,7 @@
  */
 
 #include <stdlib.h>
-#include "sorted-list.h"
+#include "header.h"
 
 int SLInsert(hashNodePtr hashNode, char* filePath) {
 	if (hashNode->Ptr == NULL) {

@@ -146,7 +146,7 @@ char** getSortedList(hashTablePtr hashtable)
 {
 	if(hashtable == NULL)
 		return NULL;
-	char** list = (char**) malloc(sizeof(char*)*hashtable->numEntries);
+	char** list = (char**) malloc(sizeof(char*) * hashtable->numEntries);
 	int i = 0, listIndex = 0;
 	for(i = 0; i < hashtable->size; i++)
 	{

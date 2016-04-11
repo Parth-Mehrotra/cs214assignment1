@@ -47,24 +47,23 @@ typedef struct TokenizerT_ TokenizerT;
 /* Create a new hashtable. */
 hashtablePtr createTable(int size);
 
-/* Hash a string for a particular hash table. */
 int hash(hashTablePtr hashtable, char* key);
 
-// Create new hashNode
 hashNodePtr createHashNode(char* key);
 
 /* Insert a key-value pair into a hash table. */
 void insert(hashTablePtr hashtable, char* key, char* filePath);
 
-// Insert an entry in the sorted list
 int SLInsert(hashNodePtr hashNode, char* filePath);
 
+// Returns a sorted array of all the elements of a hashtable
 char** getSortedList(hashTablePtr hashtable);
 
 TokenizerT* TKCreate(char* filePath);
 
 void TKDestroy(TokenizerT*);
 
-void hashFile(char* filePath);
+// Inserts all the strings in a file into a hashtable
+void hashFile(hashTablePtr hashtable, char* filePath);
 
 #endif

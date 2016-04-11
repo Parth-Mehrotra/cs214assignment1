@@ -714,7 +714,7 @@ TokenizerT* TKCreate(char* filePath) {
 	while(1)
 	{
 		//Populate Buffer	
-		obj = sizeOfBuffer-1;
+		obj = 1024;
 		done = -1;
 		while(obj != 0 && done != 0)
 		{
@@ -725,7 +725,7 @@ TokenizerT* TKCreate(char* filePath) {
 			isDone = 1;
 		whiteSpaceIndex = -1;
 		int i = sizeOfBuffer-2;
-		for(i = sizeOfBuffer-2; i != 0; i--)
+		for(i = sizeOfBuffer-2; i < 0; i--)
 		{
 			if(!isalnum(*(buffer+i)))
 			{
@@ -848,13 +848,13 @@ int main(int argc, char **argv) {
 }
 */
 
-void hashFile(char* filePath)
+void hashFile(hashTablePtr hashtable, char* filePath)
 {
 	TokerizerT* tokenizer = TKCreate(filePath);
 	if(tokenizer == NULL)
 		return;
 	char* temp = NULL;
 	while((temp = TKGetNextToken(tokenizer)) != NULL)
-		insert(temp);
+		insert(hashtable, temp, filePath);
 	TKDestroy(tokenizer);
 }

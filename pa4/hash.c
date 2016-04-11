@@ -124,7 +124,7 @@ void insert(hashTablePtr hashtable, char* key, char* filePath) {
 			prev->next = temp;
 		}
 		SLInsert(temp, fileName);
-		hashtable->numEntires++;
+		hashtable->numEntries++;
 	}
 }
 

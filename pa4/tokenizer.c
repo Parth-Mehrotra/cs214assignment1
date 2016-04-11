@@ -35,8 +35,7 @@ Token* newToken(char* input, char* type) {
 // List of case functions:
 Token* wordCase(char* currentString, int startIndex) {
     int i = startIndex;
-    while(isalnum(*(currentString + i)))
-    {
+    while(isalnum(*(currentString + i))) {
         i++;
     }
     char* temp = (char*) calloc((i+1), sizeof(char));
@@ -515,8 +514,7 @@ Token* specialCase(char* currentString, int startIndex) {
 
 Token* decimalCase(char* currentString, int startIndex) {
     int i = startIndex;
-    while(isdigit(*(currentString + i)))
-    {
+    while(isdigit(*(currentString + i))) {
         i++;
     }
     if(*(currentString + i) == '.')	{
@@ -568,8 +566,7 @@ Token* minusCase(char* currentString, int startIndex) {
 
 Token* octalCase(char* currentString, int startIndex) {
     int i = startIndex;
-    while(isdigit(*(currentString + i)))
-    {
+    while(isdigit(*(currentString + i))) {
         if(*(currentString + i) > '7')
             break;
         i++;
@@ -583,8 +580,7 @@ Token* octalCase(char* currentString, int startIndex) {
 
 Token* hexCase(char* currentString, int startIndex) {
     int i = startIndex;
-    while(isalnum(*(currentString + i)))
-    {
+    while(isalnum(*(currentString + i))) {
         if(isalpha(*(currentString + i))) {
             if(!((*(currentString + i) >= 'A' && *(currentString + i) <= 'F') ||
                     (*(currentString + i) >= 'a' && *(currentString + i) <= 'f'))) {
@@ -706,18 +702,15 @@ TokenizerT* TKCreate(char* filePath) {
     int sizeOfBuffer = 1025;
     char* buffer = (char*) malloc(sizeOfBuffer);
     memset(buffer, '\0', sizeOfBuffer);
-    while(!done)
-    {
+    while(!done) {
 	int obj = 1024;
 	int done = -1;
 	int whiteSpaceIndex = -1;
-	while(1)
-	{
+	while(1) {
 		//Populate Buffer	
 		obj = 1024;
 		done = -1;
-		while(obj != 0 && done != 0)
-		{
+		while(obj != 0 && done != 0) {
 			done = read(inputFile, buffer+(sizeOfBuffer - 1 - obj), obj);
 			obj -= done;
 		}
@@ -725,18 +718,15 @@ TokenizerT* TKCreate(char* filePath) {
 			isDone = 1;
 		whiteSpaceIndex = -1;
 		int i = sizeOfBuffer-2;
-		for(i = sizeOfBuffer-2; i < 0; i--)
-		{
-			if(!isalnum(*(buffer+i)))
-			{
+		for(i = sizeOfBuffer-2; i < 0; i--) {
+			if(!isalnum(*(buffer+i))) {
 				whiteSpaceIndex = i;
 				break;
 			}
 		}
 
 		// if whiteSpaceIndex == -1, double buffer size
-		if(whiteSpaceIndex == -1)
-		{
+		if(whiteSpaceIndex == -1) {
 			char* temp1 = (char*) malloc(sizeOfBuffer-1);
 			strncpy(temp1, buffer, sizeOfBuffer-1);
 			sizeOfBuffer += 1024;
@@ -814,19 +804,18 @@ int count = 0;
  */
 char *TKGetNextToken( TokenizerT * tk ) {
 
-while(1)
-{
-    if(tk->current == NULL)
-	return NULL;
-    if(strcmp(tk->current->type, "Word") == 0)
-    {
-    	char* temp = tk -> current -> string;
-       	tk -> current = tk -> current -> next;
-	return temp;
-    }
-    else
-	tk->current = tk->current->next;
-}
+	while(1) {
+		if(tk->current == NULL)
+		return NULL;
+		if(strcmp(tk->current->type, "Word") == 0)
+		{
+			char* temp = tk -> current -> string;
+			tk -> current = tk -> current -> next;
+		return temp;
+		}
+		else
+		tk->current = tk->current->next;
+	}
 }
 
 /*
@@ -848,8 +837,7 @@ int main(int argc, char **argv) {
 }
 */
 
-void hashFile(hashTablePtr hashtable, char* filePath)
-{
+void hashFile(hashTablePtr hashtable, char* filePath) {
 	TokerizerT* tokenizer = TKCreate(filePath);
 	if(tokenizer == NULL)
 		return;

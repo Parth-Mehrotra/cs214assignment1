@@ -688,27 +688,31 @@ TokenizerT* TKCreate(char* filePath) {
     int sizeOfBuffer = 1025;
     char* buffer = (char*) malloc(sizeOfBuffer);
     memset(buffer, '\0', sizeOfBuffer);
-	while(!isDone) {
-		int obj = 1024;
-		int done = -1;
-		int whiteSpaceIndex = -1;
-		while(1) {
-			//Populate Buffer	
-			obj = 1024;
-			done = -1;
-			while(obj != 0 && done != 0) {
-				done = read(inputFile, buffer+(sizeOfBuffer - 1 - obj), obj);
-				obj -= done;
-			}
-			if(done == 0)
-				isDone = 1;
-			whiteSpaceIndex = -1;
-			int i = sizeOfBuffer-2;
-			for(i = sizeOfBuffer-2; i < 0; i--) {
-				if(!isalnum(*(buffer+i))) {
-					whiteSpaceIndex = i;
-					break;
-				}
+    while(!isDone)
+    {
+	int obj = 1024;
+	int done = -1;
+	int whiteSpaceIndex = -1;
+	while(1)
+	{
+		//Populate Buffer	
+		obj = 1024;
+		done = -1;
+		while(obj != 0 && done != 0)
+		{
+			done = read(inputFile, buffer+(sizeOfBuffer - 1 - obj), obj);
+			obj -= done;
+		}
+		if(done == 0)
+			isDone = 1;
+		whiteSpaceIndex = -1;
+		int i = sizeOfBuffer-2;
+		for(i = sizeOfBuffer-2; i < 0; i--)
+		{
+			if(!isalnum(*(buffer+i)))
+			{
+				whiteSpaceIndex = i;
+				break;
 			}
 
 			// if whiteSpaceIndex == -1, double buffer size
@@ -829,6 +833,14 @@ void hashFile(hashTablePtr hashtable, char* filePath) {
 		return;
 	char* temp = NULL;
 	while((temp = TKGetNextToken(tokenizer)) != NULL)
+	{
+		int i;
+		for(i = 0; i < strlen(temp); i++)
+		{
+			if(isalpha(*(temp+i)))
+				*(temp+i) = tolower(*(temp+i));
+		}
 		insert(hashtable, temp, filePath);
+	}
 	TKDestroy(tokenizer);
 }

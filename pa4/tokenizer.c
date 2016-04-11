@@ -9,20 +9,6 @@
 #include <ctype.h>
 #include "header.h"
 
-struct Token_ {
-    char* string;
-    char* type;
-    struct Token_* next;
-};
-typedef struct Token_ Token;
-
-struct TokenizerT_ {
-    char* inputString;
-    Token* head;
-    Token* current;
-};
-typedef struct TokenizerT_ TokenizerT;
-
 // Token Constuctor
 Token* newToken(char* input, char* type) {
     Token* token = (Token*) malloc(sizeof(Token));
@@ -686,7 +672,7 @@ void printToken(Token* token) {
  * You need to fill in this function as part of your implementation.
  */
 TokenizerT* TKCreate(char* filePath) {
-    FILE* inputFile = fopen(filePath);
+    FILE* inputFile = fopen(filePath, "r");
     if(inputFile == 0)
 	return NULL;
 
@@ -699,67 +685,68 @@ TokenizerT* TKCreate(char* filePath) {
     int isNext = 1;
     int strOffset = 0;
     int isDone = 0;
+	int done = 0;
     int sizeOfBuffer = 1025;
     char* buffer = (char*) malloc(sizeOfBuffer);
     memset(buffer, '\0', sizeOfBuffer);
-    while(!done) {
-	int obj = 1024;
-	int done = -1;
-	int whiteSpaceIndex = -1;
-	while(1) {
-		//Populate Buffer	
-		obj = 1024;
-		done = -1;
-		while(obj != 0 && done != 0) {
-			done = read(inputFile, buffer+(sizeOfBuffer - 1 - obj), obj);
-			obj -= done;
-		}
-		if(done == 0)
-			isDone = 1;
-		whiteSpaceIndex = -1;
-		int i = sizeOfBuffer-2;
-		for(i = sizeOfBuffer-2; i < 0; i--) {
-			if(!isalnum(*(buffer+i))) {
-				whiteSpaceIndex = i;
-				break;
+	while(!done) {
+		int obj = 1024;
+		int done = -1;
+		int whiteSpaceIndex = -1;
+		while(1) {
+			//Populate Buffer	
+			obj = 1024;
+			done = -1;
+			while(obj != 0 && done != 0) {
+				done = read(inputFile, buffer+(sizeOfBuffer - 1 - obj), obj);
+				obj -= done;
 			}
-		}
+			if(done == 0)
+				isDone = 1;
+			whiteSpaceIndex = -1;
+			int i = sizeOfBuffer-2;
+			for(i = sizeOfBuffer-2; i < 0; i--) {
+				if(!isalnum(*(buffer+i))) {
+					whiteSpaceIndex = i;
+					break;
+				}
+			}
 
-		// if whiteSpaceIndex == -1, double buffer size
-		if(whiteSpaceIndex == -1) {
-			char* temp1 = (char*) malloc(sizeOfBuffer-1);
-			strncpy(temp1, buffer, sizeOfBuffer-1);
-			sizeOfBuffer += 1024;
-			char* temp2 = realloc(buffer, sizeOfBuffer);
-			buffer = temp2;
-			strcpy(buffer, temp1);
-			free(temp1);
+			// if whiteSpaceIndex == -1, double buffer size
+			if(whiteSpaceIndex == -1) {
+				char* temp1 = (char*) malloc(sizeOfBuffer-1);
+				strncpy(temp1, buffer, sizeOfBuffer-1);
+				sizeOfBuffer += 1024;
+				char* temp2 = realloc(buffer, sizeOfBuffer);
+				buffer = temp2;
+				strcpy(buffer, temp1);
+				free(temp1);
+			}
+			else
+				break;
 		}
-		else
-			break;
+		inputString = (char*) malloc(whiteSpaceIndex+2);
+		strncpy(inputString, buffer, whiteSpaceIndex+1);
+		*(inputString+whiteSpaceIndex+1) = '\0';
+
+		while (strOffset < strlen(inputString)) {
+		
+				char* currentStr = (char*) calloc(strlen(inputString) - strOffset + 1, sizeof(char));
+				strcpy(currentStr, &inputString[strOffset]);
+
+				Token* temp = getInit(currentStr);
+				strOffset += strlen(temp -> string);
+
+				if(tokenizer->head == NULL) {
+				 tokenizer -> head = temp;
+				 tokenizer -> current = temp;
+				} else {
+				 tokenizer -> current -> next = temp;
+				 tokenizer -> current = temp;
+				}
+				free(currentStr);
+			}
 	}
-	inputString = (char*) malloc(whiteSpaceIndex+2);
-	strncpy(inputString, buffer, whiteSpaceIndex+1);
-	*(inputString+whiteSpaceIndex+1) = '\0';
-
-	while (strOffset < strlen(inputString)) {
-	
-       		char* currentStr = (char*) calloc(strlen(inputString) - strOffset + 1, sizeof(char));
-       		strcpy(currentStr, &inputString[strOffset]);
-
-        	Token* temp = getInit(currentStr);
-        	strOffset += strlen(temp -> string);
-
- 	        if(tokenizer->head == NULL) {
-       		 tokenizer -> head = temp;
-       		 tokenizer -> current = temp;
-       		} else {
-          	 tokenizer -> current -> next = temp;
-           	 tokenizer -> current = temp;
-        	}
-        	free(currentStr);
-    	}
-    }
     tokenizer->current = tokenizer->head;
     fclose(inputFile);
     free(buffer);

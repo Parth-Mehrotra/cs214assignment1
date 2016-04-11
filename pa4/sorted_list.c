@@ -6,14 +6,14 @@
 #include "header.h"
 
 int SLInsert(hashNodePtr hashNode, char* filePath) {
-	if (hashNode->Ptr == NULL) {
-		hashNode->Ptr = (NodePtr) malloc(sizeof(struct Node));
-		hashNode->Ptr -> filePath = filePath;
-		hashNode->Ptr -> frequency = 1;
+	if (hashNode->ptr == NULL) {
+		hashNode->ptr = (NodePtr) malloc(sizeof(struct Node));
+		hashNode->ptr -> filePath = filePath;
+		hashNode->ptr -> frequency = 1;
 		return 1;
 	}
 
-	NodePtr temp = hashNode->Ptr;
+	NodePtr temp = hashNode->ptr;
 	NodePtr prev = NULL;
 
 	while(temp != NULL && temp->filePath != filePath)

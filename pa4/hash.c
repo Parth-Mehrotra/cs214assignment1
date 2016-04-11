@@ -6,16 +6,16 @@
 #include "header.h"
 
 /* Create a new hashtable. */
-hashtablePtr createTable(int size){
+hashTablePtr createTable(int size){
 
-	hashtablePtr hashtable = NULL;
+	hashTablePtr hashtable = NULL;
 	int i;
 
 	if( size < 1 )
 		return NULL;
 
 	/* Allocate the table itself. */
-	if( ( hashtable = malloc( sizeof( hashtableT ) ) ) == NULL ) {
+	if( ( hashtable = malloc( sizeof( hashTableT ) ) ) == NULL ) {
 		return NULL;
 	}
 
@@ -108,7 +108,7 @@ void insert(hashTablePtr hashtable, char* key, char* filePath) {
 			prev->next = temp;
 		}
 		SLInsert(temp, filePath);
-		hashtable->numEntires++;
+		hashtable->numEntries++;
 	}
 }
 

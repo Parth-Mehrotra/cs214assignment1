@@ -129,7 +129,7 @@ void insert(hashTablePtr hashtable, char* key, char* filePath) {
 }
 
 /* Retrieves sortedList of  */
-void getListOfFiles(hashTablePtr hashtable, char* key) {
+NodePtr getListOfFiles(hashTablePtr hashtable, char* key) {
 	int bin = 0;
 	hashNodePtr temp = NULL;
 	hashNodePtr next = NULL;

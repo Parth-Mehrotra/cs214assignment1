@@ -45,7 +45,7 @@ struct TokenizerT_ {
 typedef struct TokenizerT_ TokenizerT;
 
 /* Create a new hashtable. */
-hashtablePtr createTable(int size);
+hashTablePtr createTable(int size);
 
 int hash(hashTablePtr hashtable, char* key);
 

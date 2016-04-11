@@ -124,12 +124,12 @@ void insert(hashTablePtr hashtable, char* key, char* filePath) {
 			prev->next = temp;
 		}
 		SLInsert(temp, fileName);
-		hashtable->numEntires++;
+		hashtable->numEntries++;
 	}
 }
 
 /* Retrieves sortedList of  */
-void getListOfFiles(hashTablePtr hashtable, char* key) {
+NodePtr getListOfFiles(hashTablePtr hashtable, char* key) {
 	int bin = 0;
 	hashNodePtr temp = NULL;
 	hashNodePtr next = NULL;

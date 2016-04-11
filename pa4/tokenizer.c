@@ -706,7 +706,7 @@ TokenizerT* TKCreate(char* filePath) {
     int sizeOfBuffer = 1025;
     char* buffer = (char*) malloc(sizeOfBuffer);
     memset(buffer, '\0', sizeOfBuffer);
-    while(!done)
+    while(!isDone)
     {
 	int obj = 1024;
 	int done = -1;
@@ -855,6 +855,14 @@ void hashFile(hashTablePtr hashtable, char* filePath)
 		return;
 	char* temp = NULL;
 	while((temp = TKGetNextToken(tokenizer)) != NULL)
+	{
+		int i;
+		for(i = 0; i < strlen(temp); i++)
+		{
+			if(isalpha(*(temp+i)))
+				*(temp+i) = tolower(*(temp+i));
+		}
 		insert(hashtable, temp, filePath);
+	}
 	TKDestroy(tokenizer);
 }

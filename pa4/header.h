@@ -59,6 +59,9 @@ int SLInsert(hashNodePtr hashNode, char* filePath);
 // Returns a sorted array of all the elements of a hashtable
 char** getSortedList(hashTablePtr hashtable);
 
+// Returns filePath and frequency data of a given string
+NodePtr getListOfFiles(hashTablePtr hashtable, char* key);
+
 TokenizerT* TKCreate(char* filePath);
 
 void TKDestroy(TokenizerT*);
@@ -66,4 +69,6 @@ void TKDestroy(TokenizerT*);
 // Inserts all the strings in a file into a hashtable
 void hashFile(hashTablePtr hashtable, char* filePath);
 
+// Parses filePath and outputs fileName
+char* parseFilePath(char* filePath);
 #endif

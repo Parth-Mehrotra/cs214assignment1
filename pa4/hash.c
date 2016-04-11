@@ -68,8 +68,24 @@ hashNodePtr createHashNode(char* key) {
 	return temp;
 }
 
+char* parseFilePath(char* filePath)
+{
+	int slashIndex = -1;
+	int i = 0;
+	for(i = 0; i < strlen(filePath); i++)
+	{
+		if(*(filePath+i) == '/')
+			slashIndex = i;
+	}
+	if(slashIndex != -1)
+		return filePath+slashIndex+1;
+	return filePath;
+}
+
 /* Insert a key-value pair into a hash table. */
 void insert(hashTablePtr hashtable, char* key, char* filePath) {
+	char* fileName = parseFilePath(filePath);
+
 	int bin = 0;
 	hashNodePtr temp = NULL;
 	hashNodePtr next = NULL;
@@ -86,7 +102,7 @@ void insert(hashTablePtr hashtable, char* key, char* filePath) {
 
 	/* There's already a pair.  Let's replace that string. */
 	if( next != NULL && next->key != NULL && strcmp(key, next->key) == 0 ) {
-		SLInsert(next, filePath);
+		SLInsert(next, fileName);
 		hashtable->numEntries++;
 
 	// Create new hashNode 
@@ -107,10 +123,37 @@ void insert(hashTablePtr hashtable, char* key, char* filePath) {
 			temp->next = next;
 			prev->next = temp;
 		}
-		SLInsert(temp, filePath);
+		SLInsert(temp, fileName);
 		hashtable->numEntires++;
 	}
 }
+
+/* Retrieves sortedList of  */
+void getListOfFiles(hashTablePtr hashtable, char* key) {
+	int bin = 0;
+	hashNodePtr temp = NULL;
+	hashNodePtr next = NULL;
+	hashNodePtr prev = NULL;
+
+	bin = hash(hashtable, key);
+
+	next = hashtable->table[bin];
+
+	while(next != NULL && next->key != NULL && strcmp(key, next->key) > 0 ) {
+		prev = next;
+		next = next->next;
+	}
+
+	/* There's already a pair.  Let's replace that string. */
+	if( next != NULL && next->key != NULL && strcmp(key, next->key) == 0 ) {
+		return next->ptr;
+
+	// Create new hashNode 
+	} else {
+		return NULL;
+	}
+}
+
 
 void quickSort(char** a, int l, int r)
 {

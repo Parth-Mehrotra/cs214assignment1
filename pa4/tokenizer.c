@@ -685,7 +685,6 @@ TokenizerT* TKCreate(char* filePath) {
     int isNext = 1;
     int strOffset = 0;
     int isDone = 0;
-	int done = 0;
     int sizeOfBuffer = 1025;
     char* buffer = (char*) malloc(sizeOfBuffer);
     memset(buffer, '\0', sizeOfBuffer);

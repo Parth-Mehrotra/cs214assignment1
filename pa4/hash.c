@@ -194,6 +194,7 @@ char** getSortedList(hashTablePtr hashtable) {
 	if(hashtable == NULL)
 		return NULL;
 	char** list = (char**) malloc(sizeof(char*) * hashtable->numUniqueEntries);
+	memset(list, '\0', hashtable->numUniqueEntries);
 	int i = 0, listIndex = 0;
 	for(i = 0; i < hashtable->size; i++) {
 		hashNodePtr temp = hashtable->table[i];

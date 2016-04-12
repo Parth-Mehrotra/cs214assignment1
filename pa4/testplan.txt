@@ -1,7 +1,8 @@
 Testcases:
 
-Define test1.txt: "Hello World! My name is Chicken CHICKEN."
+Define test1.txt: "Hello World! My name is Chicken CHICKEN"
 Define test2.txt: "I&NAME$am\nPeperoni69.@rutgers*name am"
+Define a.txt: "I"
 
 Case1: One file given as an argument
 index myTarget.txt test1.txt
@@ -27,7 +28,7 @@ index myTarget.txt test1.txt
 	]}
 ]}
 
-Case2: A directory myDir with two files: test1.txt and test2.txt
+Case2: A directory myDir with three files: test1.txt, test2.txt, and a.txt
 index myTarget.txt myDir
 
 {"list" : [
@@ -41,6 +42,7 @@ index myTarget.txt myDir
 		{"test1" : 1}
 	]},
 	{“i” : [
+		{"a": 1},
 		{"test2" : 1}
 	]},
 	{“is” : [

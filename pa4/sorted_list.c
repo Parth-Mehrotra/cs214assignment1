@@ -17,7 +17,7 @@ int SLInsert(hashNodePtr hashNode, char* filePath) {
 	NodePtr temp = hashNode->ptr;
 	NodePtr prev = NULL;
 
-	while(temp != NULL && temp->filePath != filePath)
+	while(temp != NULL && strcmp(temp->filePath, filePath) != 0)
 	{
 		prev = temp;
 		temp = temp->next;
@@ -29,6 +29,7 @@ int SLInsert(hashNodePtr hashNode, char* filePath) {
 		prev->next->filePath = filePath;
 		prev->next->frequency = 1;
 		prev->next->next = NULL;
+		temp = prev->next;
 	}
 	else
 	{
@@ -41,15 +42,41 @@ int SLInsert(hashNodePtr hashNode, char* filePath) {
 			{
 				temp->next = trav;
 				hashNode->ptr = temp;
-				return 1;
+				prev = NULL;
 			}
-			while(trav->next != NULL && trav->next->frequency > temp->frequency)
+			else
 			{
-				trav = trav->next;
+				while(trav->next != NULL && trav->next->frequency > temp->frequency)
+				{
+					trav = trav->next;
+				}
+				temp->next = trav->next;
+				trav->next = temp;
+				prev = trav;
 			}
+		}
+	}
+
+	// If elements of the same frequency are not sorted alphabetically, fix it.
+	if(prev != NULL && strcmp(prev->filePath, temp->filePath) > 0)
+	{
+		int myFrequency = temp->frequency;
+		prev->next = temp->next;
+		NodePtr trav = hashNode->ptr;
+		if(trav->frequency == myFrequency && strcmp(trav->filePath, temp->filePath) > 0)
+		{
+			temp->next = trav;
+			hashNode->ptr = temp;
+		}
+		else
+		{
+			while(trav->next != NULL && trav->next->frequency != myFrequency)
+				trav = trav->next;
+			while(trav->next != NULL && strcmp(trav->next->filePath, temp->filePath) > 0)
+				trav = trav->next;
 			temp->next = trav->next;
 			trav->next = temp;
-			return 1;
+			prev = trav;
 		}
 	}
 	return 1;

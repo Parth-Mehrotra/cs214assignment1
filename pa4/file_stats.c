@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
 	fprintf(fp, "{\"list\":[\n");
 	int i;
 	for (i = 0; i < length; i++) {
-		NodePtr node = getListOfFiles(words[i]);
+		NodePtr node = getListOfFiles(table, *(words+i));
 		fprintf(fp, "\"%s\":[\n", words[i]);
 
 		NodePtr temp = node;

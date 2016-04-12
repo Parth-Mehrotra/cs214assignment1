@@ -1,10 +1,10 @@
 CC = gcc 
 CFLAGS = -g
 
-default: file_stats
+default: index
 
-file_stats: sorted_list.o hash.o tokenizer.o file_stats.o
-	$(CC) $(CFLAGS) -o file_stats file_stats.o tokenizer.o hash.o sorted_list.o
+index: sorted_list.o hash.o tokenizer.o file_stats.o
+	$(CC) $(CFLAGS) -o index file_stats.o tokenizer.o hash.o sorted_list.o
 
 file_stats.o: file_stats.c
 	$(CC) $(CFLAGS) -c file_stats.c

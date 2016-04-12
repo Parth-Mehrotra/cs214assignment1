@@ -30,24 +30,21 @@ hashTablePtr createTable(int size){
 
 	hashtable->size = size;
 	hashtable->numEntries = 0;
+	hashtable->numUniqueEntries = 0;
 
 	return hashtable;	
 }
 
 /* Hash a string for a particular hash table. */
-int hash(hashTablePtr hashtable, char* key){
+unsigned int hash(hashTablePtr hashtable, char *str)
+{
+    unsigned int hash = 5381;
+    int c;
 
-	unsigned long int hashval;
-	int i = 0;
+    while (c = *str++)
+        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
 
-	/* Convert our string to an integer */
-	while( hashval < ULONG_MAX && i < strlen( key ) ) {
-		hashval = hashval << 8;
-		hashval += key[ i ];
-		i++;
-	}
-
-	return hashval % hashtable->size;
+    return hash % hashtable->size;
 }
 
 // Create new hashNode
@@ -70,6 +67,8 @@ hashNodePtr createHashNode(char* key) {
 
 char* parseFilePath(char* filePath)
 {
+	if(filePath == NULL)
+		return NULL;
 	int slashIndex = -1;
 	int i = 0;
 	for(i = 0; i < strlen(filePath); i++)
@@ -91,6 +90,7 @@ void insert(hashTablePtr hashtable, char* key, char* filePath) {
 	hashNodePtr next = NULL;
 	hashNodePtr prev = NULL;
 
+	bin = hash(hashtable, key);
 	bin = hash(hashtable, key);
 
 	next = hashtable->table[bin];
@@ -124,17 +124,22 @@ void insert(hashTablePtr hashtable, char* key, char* filePath) {
 			prev->next = temp;
 		}
 		SLInsert(temp, fileName);
+		hashtable->numUniqueEntries++;
 		hashtable->numEntries++;
 	}
 }
 
 /* Retrieves sortedList of  */
 NodePtr getListOfFiles(hashTablePtr hashtable, char* key) {
+	if(hashtable == NULL || key == NULL)
+		return NULL;
+
 	int bin = 0;
 	hashNodePtr temp = NULL;
 	hashNodePtr next = NULL;
 	hashNodePtr prev = NULL;
 
+	bin = hash(hashtable, key);
 	bin = hash(hashtable, key);
 
 	next = hashtable->table[bin];
@@ -168,15 +173,18 @@ void quickSort(char** a, int l, int r)
 
 int partition(char** a, int l, int r) {
 	int i = 0, j = 0;
-	char* pivot = NULL, t = NULL;
+	char* pivot = NULL;
+	char* t = NULL;
 	pivot = a[l];
 	i = l; j = r+1;
 
 	while(1) {
-		do ++i; while(strcmp(a[i] , pivot) <= 0 && i <= r);
+		do ++i; while(i <= r && strcmp(a[i] , pivot) <= 0);
 		do --j; while(strcmp(a[j], pivot) > 0);
 		if(i >= j) break;
-		t = a[i]; a[i] = a[j]; a[j] = t;
+		t = a[i];
+		a[i] = a[j]; 
+		a[j] = t;
 	}
 	t = a[l]; a[l] = a[j]; a[j] = t;
 	return j;
@@ -185,7 +193,7 @@ int partition(char** a, int l, int r) {
 char** getSortedList(hashTablePtr hashtable) {
 	if(hashtable == NULL)
 		return NULL;
-	char** list = (char**) malloc(sizeof(char*) * hashtable->numEntries);
+	char** list = (char**) malloc(sizeof(char*) * hashtable->numUniqueEntries);
 	int i = 0, listIndex = 0;
 	for(i = 0; i < hashtable->size; i++) {
 		hashNodePtr temp = hashtable->table[i];
@@ -195,6 +203,6 @@ char** getSortedList(hashTablePtr hashtable) {
 			temp = temp->next;
 		}
 	}
-	quickSort(list, 0, hashtable->numEntries - 1);
+	quickSort(list, 0, hashtable->numUniqueEntries - 1);
 	return list;
 }

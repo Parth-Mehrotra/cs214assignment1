@@ -10,6 +10,7 @@ int SLInsert(hashNodePtr hashNode, char* filePath) {
 		hashNode->ptr = (NodePtr) malloc(sizeof(struct Node));
 		hashNode->ptr -> filePath = filePath;
 		hashNode->ptr -> frequency = 1;
+		hashNode->ptr -> next = NULL;
 		return 1;
 	}
 
@@ -27,6 +28,7 @@ int SLInsert(hashNodePtr hashNode, char* filePath) {
 		prev->next = (NodePtr) malloc(sizeof(struct Node));
 		prev->next->filePath = filePath;
 		prev->next->frequency = 1;
+		prev->next->next = NULL;
 	}
 	else
 	{

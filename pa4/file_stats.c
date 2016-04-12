@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <dirent.h>
 #include <limits.h>
+#include <string.h>
 
 #include "header.h"
 
@@ -12,24 +13,29 @@ void find_files(char* dir_name) {
 
 	if (d == NULL) {
 		hashFile(table, dir_name);
+		closedir(d);
+		return;
 	}
 
 	while (1) { 
 		struct dirent* entry; 
-		char* d_name;
+		char* d_name = (char*) malloc(strlen(dir_name) + 256);
+		memset(d_name, '\0', strlen(dir_name) + 256);
 
 		entry = readdir(d);
 		if (entry == NULL) {
 			break;
 		}
 
-		d_name = entry -> d_name;
+		d_name = strcpy(d_name, dir_name);
+		*(d_name + strlen(d_name)) = '/';
+		d_name = strcat(d_name, entry -> d_name);
 		if (entry -> d_type == DT_REG) { 
 			hashFile(table, d_name);
 		}
 
 		if (entry -> d_type == DT_DIR) {
-			if (strcmp (d_name, "..") != 0 && strcmp (d_name, ".") != 0) {
+			if (strcmp (parseFilePath(d_name), "..") != 0 && strcmp (parseFilePath(d_name), ".") != 0) {
 				int path_length;
 				char path[PATH_MAX];
 				path_length = snprintf (path, PATH_MAX, "%s/%s", dir_name, d_name);
@@ -44,7 +50,7 @@ void find_files(char* dir_name) {
 int main(int argc, char** argv) {
 	table = createTable(1000);
 	find_files(argv[2]);
-	int length = table -> numEntries;
+	int length = table -> numUniqueEntries;
 	char** words = getSortedList(table);
 
 	FILE *fp;
@@ -54,11 +60,12 @@ int main(int argc, char** argv) {
 	int i;
 	for (i = 0; i < length; i++) {
 		NodePtr node = getListOfFiles(table, *(words+i));
-		fprintf(fp, "\"%s\":[\n", words[i]);
+		fprintf(fp, "\t\"%s\":[\n", words[i]);
 
 		NodePtr temp = node;
 		while (1) {
-			fprintf(fp, "{\"%s\":%d}", parseFilePath(temp -> filePath), temp -> frequency);
+			char* fileName = parseFilePath(temp->filePath);
+			fprintf(fp, "\t\t{\"%s\":%d}", parseFilePath(temp -> filePath), temp -> frequency);
 			if (temp -> next == NULL) {
 				fprintf(fp, "\n");
 				break;
@@ -68,9 +75,9 @@ int main(int argc, char** argv) {
 		}
 
 		if (i < length - 1) {
-			fprintf(fp, "]},\n");
+			fprintf(fp, "\t]},\n");
 		} else {
-			fprintf(fp, "]}\n");
+			fprintf(fp, "\t]}\n");
 		}
 	}
 

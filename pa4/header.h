@@ -26,6 +26,7 @@ typedef hashNodeT* hashNodePtr;
 typedef struct hashtable{
 	int size;
 	int numEntries;
+	int numUniqueEntries;
 	struct hashNode** table;	
 } hashTableT;
 typedef hashTableT* hashTablePtr;
@@ -47,7 +48,7 @@ typedef struct TokenizerT_ TokenizerT;
 /* Create a new hashtable. */
 hashTablePtr createTable(int size);
 
-int hash(hashTablePtr hashtable, char* key);
+unsigned int hash(hashTablePtr hashtable, char* key);
 
 hashNodePtr createHashNode(char* key);
 

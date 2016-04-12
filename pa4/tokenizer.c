@@ -704,14 +704,14 @@ TokenizerT* TKCreate(char* filePath) {
 		done = -1;
 		while(obj != 0 && done != 0)
 		{
-			done = read(inputFile, buffer+(sizeOfBuffer - 1 - obj), obj);
+			done = fread(buffer+(sizeOfBuffer - 1 - obj), 1, obj, inputFile);
 			obj -= done;
 		}
 		if(done == 0)
 			isDone = 1;
 		whiteSpaceIndex = -1;
 		int i = sizeOfBuffer-2;
-		for(i = sizeOfBuffer-2; i < 0; i--)
+		for(i = sizeOfBuffer-2; i >= 0; i--)
 		{
 			if(!isalnum(*(buffer+i)))
 			{
@@ -757,7 +757,7 @@ TokenizerT* TKCreate(char* filePath) {
     	}
     }
     tokenizer->current = tokenizer->head;
-    fclose(inputFile);
+    close(inputFile);
     free(buffer);
 
     return tokenizer;

@@ -1,0 +1,107 @@
+Testcases:
+
+Define test1.txt: "Hello World! My name is Chicken CHICKEN."
+Define test2.txt: "I&NAME$am\nPeperoni69.@rutgers*name am"
+
+Case1: One file given as an argument
+index myTarget.txt test1.txt
+
+{"list" : [
+	{"chicken" : [
+		{"test1" : 2}
+	]},
+	{"hello" : [
+		{"test1" : 1}
+	]},
+	{“is” : [
+		{"test1" : 1}
+	]},
+	{“my” : [
+		{"test1" : 1}
+	]},
+	{“name” : [
+		{"test1" : 1}
+	]},
+	{“world” : [
+		{"test1" : 1}
+	]}
+]}
+
+Case2: A directory myDir with two files: test1.txt and test2.txt
+index myTarget.txt myDir
+
+{"list" : [
+	{"am" : [
+		{"test2" : 2}
+	]},
+	{"chicken" : [
+		{"test1" : 2}
+	]},
+	{"hello" : [
+		{"test1" : 1}
+	]},
+	{“i” : [
+		{"test2" : 1}
+	]},
+	{“is” : [
+		{"test1" : 1}
+	]},
+	{“my” : [
+		{"test1" : 1}
+	]},
+	{“name” : [
+		{"test2" : 2},
+		{"test1" : 1}
+	]},
+	{“peperoni69” : [
+		{"test2" : 1}
+	]},
+	{“rutgers” : [
+		{"test2" : 1}
+	]},
+	{“world” : [
+		{"test1" : 1}
+	]}
+]}
+
+Case3: Same file name given in two different directories
+myDir/test1.txt
+myDir/anotherDir/test1.txt
+
+index myTarget.txt myDir
+
+{"list" : [
+	{"chicken" : [
+		{"test1" : 4}
+	]},
+	{"hello" : [
+		{"test1" : 2}
+	]},
+	{“is” : [
+		{"test1" : 2}
+	]},
+	{“my” : [
+		{"test1" : 2}
+	]},
+	{“name” : [
+		{"test1" : 2}
+	]},
+	{“world” : [
+		{"test1" : 2}
+	]}
+]}
+
+Case4: Empty File
+
+index myTarget.txt emptyFile.txt
+
+Case5: Target File does not exist
+
+index myTarget.txt IDONOTEXIST.txt
+
+Case6: Output file already exists
+
+index IALREADYEXIST.txt test1.txt
+
+Case7: Long File as input
+index output.txt LONGFILE.txt

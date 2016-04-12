@@ -21,7 +21,8 @@ Token* newToken(char* input, char* type) {
 // List of case functions:
 Token* wordCase(char* currentString, int startIndex) {
     int i = startIndex;
-    while(isalnum(*(currentString + i))) {
+    while(isalnum(*(currentString + i)))
+    {
         i++;
     }
     char* temp = (char*) calloc((i+1), sizeof(char));
@@ -500,7 +501,8 @@ Token* specialCase(char* currentString, int startIndex) {
 
 Token* decimalCase(char* currentString, int startIndex) {
     int i = startIndex;
-    while(isdigit(*(currentString + i))) {
+    while(isdigit(*(currentString + i)))
+    {
         i++;
     }
     if(*(currentString + i) == '.')	{
@@ -552,7 +554,8 @@ Token* minusCase(char* currentString, int startIndex) {
 
 Token* octalCase(char* currentString, int startIndex) {
     int i = startIndex;
-    while(isdigit(*(currentString + i))) {
+    while(isdigit(*(currentString + i)))
+    {
         if(*(currentString + i) > '7')
             break;
         i++;
@@ -566,7 +569,8 @@ Token* octalCase(char* currentString, int startIndex) {
 
 Token* hexCase(char* currentString, int startIndex) {
     int i = startIndex;
-    while(isalnum(*(currentString + i))) {
+    while(isalnum(*(currentString + i)))
+    {
         if(isalpha(*(currentString + i))) {
             if(!((*(currentString + i) >= 'A' && *(currentString + i) <= 'F') ||
                     (*(currentString + i) >= 'a' && *(currentString + i) <= 'f'))) {
@@ -714,42 +718,44 @@ TokenizerT* TKCreate(char* filePath) {
 				whiteSpaceIndex = i;
 				break;
 			}
-
-			// if whiteSpaceIndex == -1, double buffer size
-			if(whiteSpaceIndex == -1) {
-				char* temp1 = (char*) malloc(sizeOfBuffer-1);
-				strncpy(temp1, buffer, sizeOfBuffer-1);
-				sizeOfBuffer += 1024;
-				char* temp2 = realloc(buffer, sizeOfBuffer);
-				buffer = temp2;
-				strcpy(buffer, temp1);
-				free(temp1);
-			}
-			else
-				break;
 		}
-		inputString = (char*) malloc(whiteSpaceIndex+2);
-		strncpy(inputString, buffer, whiteSpaceIndex+1);
-		*(inputString+whiteSpaceIndex+1) = '\0';
 
-		while (strOffset < strlen(inputString)) {
-		
-				char* currentStr = (char*) calloc(strlen(inputString) - strOffset + 1, sizeof(char));
-				strcpy(currentStr, &inputString[strOffset]);
-
-				Token* temp = getInit(currentStr);
-				strOffset += strlen(temp -> string);
-
-				if(tokenizer->head == NULL) {
-				 tokenizer -> head = temp;
-				 tokenizer -> current = temp;
-				} else {
-				 tokenizer -> current -> next = temp;
-				 tokenizer -> current = temp;
-				}
-				free(currentStr);
-			}
+		// if whiteSpaceIndex == -1, double buffer size
+		if(whiteSpaceIndex == -1)
+		{
+			char* temp1 = (char*) malloc(sizeOfBuffer-1);
+			strncpy(temp1, buffer, sizeOfBuffer-1);
+			sizeOfBuffer += 1024;
+			char* temp2 = realloc(buffer, sizeOfBuffer);
+			buffer = temp2;
+			strcpy(buffer, temp1);
+			free(temp1);
+		}
+		else
+			break;
 	}
+	inputString = (char*) malloc(whiteSpaceIndex+2);
+	strncpy(inputString, buffer, whiteSpaceIndex+1);
+	*(inputString+whiteSpaceIndex+1) = '\0';
+
+	while (strOffset < strlen(inputString)) {
+	
+       		char* currentStr = (char*) calloc(strlen(inputString) - strOffset + 1, sizeof(char));
+       		strcpy(currentStr, &inputString[strOffset]);
+
+        	Token* temp = getInit(currentStr);
+        	strOffset += strlen(temp -> string);
+
+ 	        if(tokenizer->head == NULL) {
+       		 tokenizer -> head = temp;
+       		 tokenizer -> current = temp;
+       		} else {
+          	 tokenizer -> current -> next = temp;
+           	 tokenizer -> current = temp;
+        	}
+        	free(currentStr);
+    	}
+    }
     tokenizer->current = tokenizer->head;
     fclose(inputFile);
     free(buffer);
@@ -794,18 +800,19 @@ int count = 0;
  */
 char *TKGetNextToken( TokenizerT * tk ) {
 
-	while(1) {
-		if(tk->current == NULL)
-		return NULL;
-		if(strcmp(tk->current->type, "Word") == 0)
-		{
-			char* temp = tk -> current -> string;
-			tk -> current = tk -> current -> next;
-		return temp;
-		}
-		else
-		tk->current = tk->current->next;
-	}
+while(1)
+{
+    if(tk->current == NULL)
+	return NULL;
+    if(strcmp(tk->current->type, "Word") == 0)
+    {
+    	char* temp = tk -> current -> string;
+       	tk -> current = tk -> current -> next;
+	return temp;
+    }
+    else
+	tk->current = tk->current->next;
+}
 }
 
 /*
@@ -827,7 +834,8 @@ int main(int argc, char **argv) {
 }
 */
 
-void hashFile(hashTablePtr hashtable, char* filePath) {
+void hashFile(hashTablePtr hashtable, char* filePath)
+{
 	TokenizerT* tokenizer = TKCreate(filePath);
 	if(tokenizer == NULL)
 		return;

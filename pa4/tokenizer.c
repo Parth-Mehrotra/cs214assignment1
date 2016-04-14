@@ -771,6 +771,13 @@ TokenizerT* TKCreate(char* filePath) {
  */
 void TKDestroy( TokenizerT * tk ) {
 int count = 0;
+if(tk == NULL)
+	return;
+if(tk->head == NULL)
+{
+	free(tk);
+	return;
+}
     while (tk -> head -> next != NULL) {
         Token* temp = tk -> head;
         while (temp -> next -> next != NULL) {

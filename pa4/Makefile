@@ -19,4 +19,4 @@ tokenizer.o: tokenizer.c
 	$(CC) $(CFLAGS) -c tokenizer.c
 
 clean: 
-	rm -rf *.o file_stats
+	rm -rf *.o index

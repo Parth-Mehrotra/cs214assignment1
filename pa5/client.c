@@ -71,6 +71,8 @@ int main(int argc, char *argv[]) {
         printf("ERROR connecting");
 	}	
 	
+while(1)
+{
 	/** If we're here, we're connected to the server .. w00t!  **/
     printf("Please enter the message: ");
 	
@@ -101,6 +103,7 @@ int main(int argc, char *argv[]) {
 
 	// print out server's message
     printf("%s\n",buffer);
+}
 
     return 0;
 }

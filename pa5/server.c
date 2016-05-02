@@ -69,6 +69,7 @@ void* communicate(void* args)
 	int inClientSession = 0;
 	AccountPtr thisAcc = NULL;
 	int thisAccIndex = -1;
+	int tries = 0;
 		 
 	// if the connection blew up for some reason, complain and exit
 	if (newsockfd < 0) 
@@ -95,7 +96,19 @@ void* communicate(void* args)
 			}
 			continue;
 		}
-		
+		else if(n == 0)
+		{
+			if(tries < 2)
+			{
+				break;
+			}
+			else
+			{
+				tries++;
+				continue;
+			}
+		}
+		tries = 0;
 		*(buffer+n-1) = '\0';
 		command = parseCommand(buffer);
 		if(command == -1)

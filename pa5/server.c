@@ -30,6 +30,34 @@ void error(char *msg)
     exit(1);
 }
 
+void sigHandler(int signum)
+{
+	NodePtr temp = threadList->head;
+	while(temp != NULL && temp->inSession)
+	{
+		write(temp->newsockfd,"The server is shutting down.\n",30);
+	}
+	free(threadArgs);
+	pthread_attr_destroy(&threadAttr);
+
+	pthread_mutex_destroy(&openAccMutex);
+	pthread_mutex_destroy(&startAccMutex);
+	pthread_mutex_destroy(&changeBalanceMutex);
+
+	pthread_cancel(*garbageCollector);	
+	free(garbageCollector);
+	destroyThreadList();
+	
+	int i;
+	for(i = 0; i < numAccounts; i++)
+	{
+		free(accountList[i]->name);
+		free(accountList[i]);
+	}
+	free(accountList);
+	exit(0);
+}
+
 void* communicate(void* args)
 {
 	/** If we're here, a client tried to connect **/
@@ -368,34 +396,6 @@ void* communicate(void* args)
 	}
 	endPThread(newsockfd);
 	pthread_exit(NULL);
-}
-
-void sigHandler(int signum)
-{
-	NodePtr temp = threadList->head;
-	while(temp != NULL && temp->inSession)
-	{
-		write(temp->newsockfd,"The server is shutting down.\n",30);
-	}
-	free(threadArgs);
-	pthread_attr_destroy(&threadAttr);
-
-	pthread_mutex_destroy(&openAccMutex);
-	pthread_mutex_destroy(&startAccMutex);
-	pthread_mutex_destroy(&changeBalanceMutex);
-
-	pthread_cancel(*garbageCollector);	
-	free(garbageCollector);
-	destroyThreadList();
-	
-	int i;
-	for(i = 0; i < numAccounts; i++)
-	{
-		free(accountList[i]->name);
-		free(accountList[i]);
-	}
-	free(accountList);
-	exit(0);
 }
 
 void sigPrintout(int signum)

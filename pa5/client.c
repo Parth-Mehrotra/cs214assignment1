@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
 	// try to build a socket .. if it doesn't work, complain and exit
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
-        error("ERROR creating socket");
+        printf("ERROR creating socket");
 	}
 
 	// zero out the socket address info struct .. always initialize!
@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
 	//   if it doesn't work, complain and exit
     if (connect(sockfd,(struct sockaddr *)&serverAddressInfo,sizeof(serverAddressInfo)) < 0) 
 	{
-        error("ERROR connecting");
+        printf("ERROR connecting");
 	}	
 	
 	/** If we're here, we're connected to the server .. w00t!  **/
@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
 	
 	// if we couldn't write to the server for some reason, complain and exit
     if (n < 0) {
-         error("ERROR writing to socket");
+         printf("ERROR writing to socket");
     }
 	
 	// sent message to the server, zero the buffer back out to read the server's response
@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
 	
 	// if we couldn't read from the server for some reason, complain and exit
     if (n < 0) {
-         error("ERROR reading from socket");
+         printf("ERROR reading from socket");
 	}
 
 	// print out server's message

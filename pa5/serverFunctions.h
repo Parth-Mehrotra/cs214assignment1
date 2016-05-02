@@ -15,9 +15,8 @@ typedef struct Account* AccountPtr;
 enum {OPEN=0, START=1, CREDIT=2, DEBIT=3, BALANCE=4, FINISH=5, EXIT=6};
 
 int parseCommand(char* command);
-AccountPtr openAccount(char* name);
-AccountPtr startAccount(char* name);
-void closeAccount(AccountPtr account);
+int openAccount(char* name);
+int startAccount(char* name);
 int changeBalance(AccountPtr account, int amount);
 
 struct Node{
@@ -33,9 +32,9 @@ struct ThreadList{
 };
 typedef struct ThreadList* ThreadListPtr;
 
-int addPThread(ThreadListPtr threadList, pthread_t* pthreadPtr, int newsockfd);
-int endPThread(ThreadListPtr threadList, int newsockfd);
-int destroyThreadList(ThreadListPtr threadList);
-void* threadGarbageCollector(void* listPtr);
+int addPThread(pthread_t* pthreadPtr, int newsockfd);
+int endPThread(int newsockfd);
+int destroyThreadList();
+void* threadGarbageCollector(void* junk);
 
 #endif

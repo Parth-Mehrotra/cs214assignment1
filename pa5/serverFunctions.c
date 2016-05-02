@@ -5,6 +5,16 @@
 #include <pthread.h>
 #include <time.h>
 
+#include "serverFunctions.h"
+
+extern ThreadListPtr threadList;
+extern AccountPtr accountList[20];
+extern int numAccounts;
+
+extern pthread_mutex_t openAccMutex;
+extern pthread_mutex_t startAccMutex;
+extern pthread_mutex_t changeBalanceMutex;
+
 int parseCommand(char* command)
 {
 	if(strlen(command) < 4)
@@ -56,15 +66,83 @@ int parseCommand(char* command)
 		return -1;
 	}
 }
-AccountPtr openAccount(char* name);
-AccountPtr startAccount(char* name);
-void closeAccount(AccountPtr account);
-int changeBalance(AccountPtr account, int amount);
+int openAccount(char* name)
+{
+	// Lock Mutex
+	pthread_mutex_lock(&openAccMutex);
+	if(numAccounts == 20)
+	{
+		pthread_mutex_unlock(&openAccMutex);
+		return -1;
+	}
+	int i;
+	for(i = 0; i < numAccounts; i++)
+	{
+		if(strcmp(accountList[i]->name, name) == 0)
+		{
+			pthread_mutex_unlock(&openAccMutex);
+			return -2;
+		}
+	}
+	int newAccIndex = 0;
+	AccountPtr newAcc = (AccountPtr)malloc(sizeof(struct Account));
+	newAcc->name = name;
+	newAcc->balance = 0;
+	newAcc->isInSession = 1;
+	accountList[numAccounts] = newAcc;
+	newAccIndex = numAccounts;
+	numAccounts++;
+	// Unlock Mutex
+	pthread_mutex_unlock(&openAccMutex);
 
-int addPThread(ThreadListPtr threadList, pthread_t* pthreadPtr, int newsockfd)
+	return newAccIndex;
+}
+int startAccount(char* name)
+{
+	// Lock Mutex
+	pthread_mutex_lock(&startAccMutex);
+	int accIndex = -1;
+	int i;
+	for(i = 0; i < numAccounts; i++)
+	{
+		if(strcmp(accountList[i]->name, name) == 0)
+			accIndex = i;
+	}
+	if(accIndex == -1)
+	{
+		pthread_mutex_unlock(&startAccMutex);
+		return -1;
+	}
+	AccountPtr thisAcc = accountList[i];
+	if(thisAcc->isInSession)
+	{
+		pthread_mutex_unlock(&startAccMutex);
+		return -2;
+	}
+	thisAcc->isInSession = 1;
+	// Unlock Mutex
+	pthread_mutex_unlock(&startAccMutex);
+	return accIndex;
+}
+int changeBalance(AccountPtr account, int amount)
+{
+	// Lock Mutex
+	pthread_mutex_lock(&changeBalanceMutex);
+	if((amount + account->balance) < 0)
+	{
+		pthread_mutex_unlock(&changeBalanceMutex);
+		return 0;
+	}
+	account->balance += amount;
+	// Unlock Mutex
+	pthread_mutex_unlock(&changeBalanceMutex);
+	return 1;
+}
+
+int addPThread(pthread_t* pthreadPtr, int newsockfd)
 {
 	NodePtr newNode;
-	if((newNode = (NodePtr)malloc(sizeof(struct Node)) < 0)
+	if((newNode = (NodePtr)malloc(sizeof(struct Node))) < 0)
 		return 0;
 	newNode->pthreadPtr = pthreadPtr;
 	newNode->newsockfd = newsockfd;
@@ -73,7 +151,7 @@ int addPThread(ThreadListPtr threadList, pthread_t* pthreadPtr, int newsockfd)
 	threadList->head = newNode;
 	return 1;
 }
-int endPThread(ThreadListPtr threadList, int newsockfd)
+int endPThread(int newsockfd)
 {
 	NodePtr temp = threadList->head;
 	while(temp != NULL)
@@ -88,7 +166,7 @@ int endPThread(ThreadListPtr threadList, int newsockfd)
 	return 0;
 }
 
-int destroyThreadList(ThreadListPtr threadList)
+int destroyThreadList()
 {
 	if(threadList == NULL)
 		return 1;
@@ -102,9 +180,8 @@ int destroyThreadList(ThreadListPtr threadList)
 	return 1;
 }
 
-void* threadGarbageCollector(void* listPtr)
+void* threadGarbageCollector(void* junk)
 {
-	ThreadListPtr threadList = (ThreadListPtr)listPtr;
 	NodePtr temp = threadList->head;
 	NodePtr prev = NULL;
 	while(1)
@@ -119,7 +196,7 @@ void* threadGarbageCollector(void* listPtr)
 					prev->next = temp->next;
 				else
 					threadList->head = temp->next;
-				pthread_join(temp->pthreadPtr);
+				pthread_join(*(temp->pthreadPtr), NULL);
 				free(temp->pthreadPtr);
 				free(temp);
 				break;

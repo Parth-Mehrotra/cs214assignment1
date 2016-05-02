@@ -65,8 +65,10 @@ void* communicate(void* args)
 			{
 				error("ERROR writing to socket");
 			}
+			continue;
 		}
-	
+		
+		*(buffer+n-1) = '\0';
 		command = parseCommand(buffer);
 		if(command == -1)
 		{
@@ -135,7 +137,7 @@ void* communicate(void* args)
 			thisAcc = accountList[thisAccIndex];
 			inClientSession = 1;
 			// try to write to the client socket
-			n = write(newsockfd,"Your account has been created successfully.\n",31);
+			n = write(newsockfd,"Your account has been created successfully.\n",44);
 			// if the write to the client below up, complain and exit
 			if (n < 0)
 			{
@@ -154,6 +156,7 @@ void* communicate(void* args)
 				{
 					error("ERROR writing to socket");
 				}
+				continue;
 			}	
 			char* accName = (char*)malloc(101);
 			memset(accName, '\0', 101);
@@ -170,7 +173,7 @@ void* communicate(void* args)
 				free(accName);
 				continue;
 			}
-			thisAccIndex = openAccount(accName);
+			thisAccIndex = startAccount(accName);
 			if(thisAccIndex == -1)
 			{
 				// try to write to the client socket
@@ -186,7 +189,7 @@ void* communicate(void* args)
 			if(thisAccIndex == -2)
 			{
 				// try to write to the client socket
-				n = write(newsockfd,"Your account is already in-session.\n",36);
+				n = write(newsockfd,"That account is already in-session.\n",36);
 				// if the write to the client below up, complain and exit
 				if (n < 0)
 				{
@@ -198,7 +201,7 @@ void* communicate(void* args)
 			thisAcc = accountList[thisAccIndex];
 			inClientSession = 1;
 			// try to write to the client socket
-			n = write(newsockfd,"Your account has been started successfully.\n",30);
+			n = write(newsockfd,"Your account has been started successfully.\n",44);
 			// if the write to the client below up, complain and exit
 			if (n < 0)
 			{
@@ -218,11 +221,12 @@ void* communicate(void* args)
 				{
 					error("ERROR writing to socket");
 				}
+				continue;
 			}	
 			char* amountStr = (char*)malloc(101);
 			memset(amountStr, '\0', 101);
 			strncpy(amountStr, buffer+7, 100);
-			int amount = atoi(amountStr);
+			int amount = (float)atof(amountStr);
 			if(amount <= 0)
 			{
 				// try to write to the client socket
@@ -257,11 +261,12 @@ void* communicate(void* args)
 				{
 					error("ERROR writing to socket");
 				}
+				continue;
 			}	
 			char* amountStr = (char*)malloc(101);
 			memset(amountStr, '\0', 101);
 			strncpy(amountStr, buffer+6, 100);
-			int amount = atoi(amountStr);
+			int amount = (float)atof(amountStr);
 			if(amount <= 0)
 			{
 				// try to write to the client socket
@@ -308,9 +313,10 @@ void* communicate(void* args)
 				{
 					error("ERROR writing to socket");
 				}
+				continue;
 			}	
 			char* output = (char*)malloc(100);
-			sprintf(output, "Your current balance is: %d.\n", thisAcc->balance);
+			sprintf(output, "Your current balance is: %.2f.\n", thisAcc->balance);
 			// try to write to the client socket
 			n = write(newsockfd, output, strlen(output) + 1);
 			// if the write to the client below up, complain and exit
@@ -332,11 +338,19 @@ void* communicate(void* args)
 				{
 					error("ERROR writing to socket");
 				}
+				continue;
 			}	
 			inClientSession = 0;
 			thisAccIndex = -1;
 			thisAcc->isInSession = 0;
 			thisAcc = NULL;
+			// try to write to the client socket
+			n = write(newsockfd,"This client session has been closed.\n",37);
+			// if the write to the client below up, complain and exit
+			if (n < 0)
+			{
+				error("ERROR writing to socket");
+			}
 			continue;
 		}
 		if(command == EXIT)
@@ -400,7 +414,7 @@ void sigPrintout(int signum)
 		{
 			strcat(outputStr, "Balance: ");
 			char* balanceStr = (char*)malloc(100); 
-			sprintf(balanceStr, "%d\n\n", thisAcc->balance);
+			sprintf(balanceStr, "%.2f\n\n", thisAcc->balance);
 			strcat(outputStr, balanceStr);
 			free(balanceStr);
 		}
@@ -423,7 +437,7 @@ int main(int argc, char *argv[])
 	accountList = (AccountPtr*)malloc(20*sizeof(AccountPtr));
 	int i;
 	for(i = 0; i < 20; i++)
-		accountList[i] = NULL;
+		*(accountList+i) = NULL;
 	numAccounts = 0;
 	// Thread Variables
 	threadArgs = (int*)malloc(sizeof(int));
@@ -482,14 +496,14 @@ int main(int argc, char *argv[])
 	}
 
 	// set up the server socket to listen for client connections
-	listen(sockfd,5);
+	listen(sockfd,20);
 	
 	// determine the size of a clientAddressInfo struct
 	clilen = sizeof(clientAddressInfo);
 
 	// Setup signal-handler
-	signal(SIGINT, sigHandler);
 	signal(SIGALRM, sigPrintout);
+	signal(SIGINT, sigHandler);
 	alarm(20);
 
 	while(1)

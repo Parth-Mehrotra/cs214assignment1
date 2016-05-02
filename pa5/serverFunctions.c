@@ -8,7 +8,7 @@
 #include "serverFunctions.h"
 
 extern ThreadListPtr threadList;
-extern AccountPtr accountList[20];
+extern AccountPtr* accountList;
 extern int numAccounts;
 
 extern pthread_mutex_t openAccMutex;
@@ -78,7 +78,7 @@ int openAccount(char* name)
 	int i;
 	for(i = 0; i < numAccounts; i++)
 	{
-		if(strcmp(accountList[i]->name, name) == 0)
+		if(strcmp((*(accountList + i))->name, name) == 0)
 		{
 			pthread_mutex_unlock(&openAccMutex);
 			return -2;
@@ -87,9 +87,9 @@ int openAccount(char* name)
 	int newAccIndex = 0;
 	AccountPtr newAcc = (AccountPtr)malloc(sizeof(struct Account));
 	newAcc->name = name;
-	newAcc->balance = 0;
+	newAcc->balance = 0.0;
 	newAcc->isInSession = 1;
-	accountList[numAccounts] = newAcc;
+	*(accountList + numAccounts) = newAcc;
 	newAccIndex = numAccounts;
 	numAccounts++;
 	// Unlock Mutex
@@ -105,7 +105,7 @@ int startAccount(char* name)
 	int i;
 	for(i = 0; i < numAccounts; i++)
 	{
-		if(strcmp(accountList[i]->name, name) == 0)
+		if(strcmp((*(accountList + i))->name, name) == 0)
 			accIndex = i;
 	}
 	if(accIndex == -1)
@@ -113,7 +113,7 @@ int startAccount(char* name)
 		pthread_mutex_unlock(&startAccMutex);
 		return -1;
 	}
-	AccountPtr thisAcc = accountList[i];
+	AccountPtr thisAcc = *(accountList+accIndex);
 	if(thisAcc->isInSession)
 	{
 		pthread_mutex_unlock(&startAccMutex);
@@ -124,7 +124,7 @@ int startAccount(char* name)
 	pthread_mutex_unlock(&startAccMutex);
 	return accIndex;
 }
-int changeBalance(AccountPtr account, int amount)
+int changeBalance(AccountPtr account, float amount)
 {
 	// Lock Mutex
 	pthread_mutex_lock(&changeBalanceMutex);

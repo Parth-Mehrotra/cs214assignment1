@@ -17,7 +17,7 @@ enum {OPEN=0, START=1, CREDIT=2, DEBIT=3, BALANCE=4, FINISH=5, EXIT=6};
 int parseCommand(char* command);
 int openAccount(char* name);
 int startAccount(char* name);
-int changeBalance(AccountPtr account, int amount);
+int changeBalance(AccountPtr account, float amount);
 
 struct Node{
 	pthread_t* pthreadPtr;
@@ -35,6 +35,5 @@ typedef struct ThreadList* ThreadListPtr;
 int addPThread(pthread_t* pthreadPtr, int newsockfd);
 int endPThread(int newsockfd);
 int destroyThreadList();
-void* threadGarbageCollector(void* junk);
 
 #endif

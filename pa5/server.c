@@ -58,8 +58,43 @@ void sigHandler(int signum)
 	exit(0);
 }
 
+void sigPrintout(int signum)
+{
+	char* outputStr = (char*)malloc(3072);
+	memset(outputStr, '\0', 3072);
+	strcat(outputStr, "\nCURRENT BANK STATE\n\n");
+	int i;
+	for(i = 0; i < numAccounts; i++)
+	{
+		AccountPtr thisAcc = accountList[i];
+		strcat(outputStr, thisAcc->name);
+		strcat(outputStr, "\n");
+
+		if(!thisAcc->isInSession)
+		{
+			strcat(outputStr, "Balance: ");
+			char* balanceStr = (char*)malloc(100); 
+			sprintf(balanceStr, "%.2f\n\n", thisAcc->balance);
+			strcat(outputStr, balanceStr);
+			free(balanceStr);
+		}
+		else
+		{
+			strcat(outputStr, "IN-SESSION\n\n");
+		}
+	}
+	if(numAccounts == 0)
+		strcat(outputStr, "NO OPEN ACCOUNTS\n\n");
+	
+	printf(outputStr);
+	free(outputStr);
+	alarm(20);
+}
+
 void* communicate(void* args)
 {
+	signal(SIGINT, sigHandler);
+
 	/** If we're here, a client tried to connect **/
 	int newsockfd = *((int*)args);
 
@@ -69,6 +104,7 @@ void* communicate(void* args)
 	int inClientSession = 0;
 	AccountPtr thisAcc = NULL;
 	int thisAccIndex = -1;
+	int tries = 0;
 		 
 	// if the connection blew up for some reason, complain and exit
 	if (newsockfd < 0) 
@@ -95,7 +131,19 @@ void* communicate(void* args)
 			}
 			continue;
 		}
-		
+		else if(n == 0)
+		{
+			if(tries < 2)
+			{
+				break;
+			}
+			else
+			{
+				tries++;
+				continue;
+			}
+		}
+		tries = 0;
 		*(buffer+n-1) = '\0';
 		command = parseCommand(buffer);
 		if(command == -1)
@@ -398,37 +446,31 @@ void* communicate(void* args)
 	pthread_exit(NULL);
 }
 
-void sigPrintout(int signum)
+void* threadGarbageCollector(void* junk)
 {
-	char* outputStr = (char*)malloc(3072);
-	memset(outputStr, '\0', 3072);
-	strcat(outputStr, "\nCURRENT BANK STATE\n\n");
-	int i;
-	for(i = 0; i < numAccounts; i++)
+	NodePtr temp = threadList->head;
+	NodePtr prev = NULL;
+	while(1)
 	{
-		AccountPtr thisAcc = accountList[i];
-		strcat(outputStr, thisAcc->name);
-		strcat(outputStr, "\n");
-
-		if(!thisAcc->isInSession)
+		temp = threadList->head;
+		prev = NULL;
+		while(temp != NULL)
 		{
-			strcat(outputStr, "Balance: ");
-			char* balanceStr = (char*)malloc(100); 
-			sprintf(balanceStr, "%.2f\n\n", thisAcc->balance);
-			strcat(outputStr, balanceStr);
-			free(balanceStr);
-		}
-		else
-		{
-			strcat(outputStr, "IN-SESSION\n\n");
+			if(temp->inSession == 0)
+			{
+				if(prev != NULL)
+					prev->next = temp->next;
+				else
+					threadList->head = temp->next;
+				pthread_join(*(temp->pthreadPtr), NULL);
+				free(temp->pthreadPtr);
+				free(temp);
+				break;
+			}
+			prev = temp;
+			temp = temp->next;
 		}
 	}
-	if(numAccounts == 0)
-		strcat(outputStr, "NO OPEN ACCOUNTS\n\n");
-	
-	printf(outputStr);
-	free(outputStr);
-	alarm(20);
 }
 
 int main(int argc, char *argv[])

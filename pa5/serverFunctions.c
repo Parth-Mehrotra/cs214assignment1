@@ -179,31 +179,3 @@ int destroyThreadList()
 	free(threadList);
 	return 1;
 }
-
-void* threadGarbageCollector(void* junk)
-{
-	NodePtr temp = threadList->head;
-	NodePtr prev = NULL;
-	while(1)
-	{
-		temp = threadList->head;
-		prev = NULL;
-		while(temp != NULL)
-		{
-			if(temp->inSession == 0)
-			{
-				if(prev != NULL)
-					prev->next = temp->next;
-				else
-					threadList->head = temp->next;
-				pthread_join(*(temp->pthreadPtr), NULL);
-				free(temp->pthreadPtr);
-				free(temp);
-				break;
-			}
-			prev = temp;
-			temp = temp->next;
-		}
-	}
-}
-

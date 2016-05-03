@@ -86,10 +86,13 @@ int main(int argc, char *argv[]) {
 	
 	// try to connect to the server using our blank socket and the address info struct 
 	//   if it doesn't work, complain and exit
-    if (connect(sockfd,(struct sockaddr *)&serverAddressInfo,sizeof(serverAddressInfo)) < 0) {
-        printf("ERROR connecting\n");
-		exit(1);
-	}	
+	while(1) {
+		if (connect(sockfd,(struct sockaddr *)&serverAddressInfo,sizeof(serverAddressInfo)) < 0) {
+			printf("ERROR connecting\n");
+			printf("Retrying\n");
+			sleep(3);
+		}	
+	}
 
 	pthread_t thread0;
 	pthread_create(&thread0, NULL, read_from_server, NULL);

@@ -20,6 +20,10 @@ void *read_from_server() {
 			printf("%s\n", buffer);
 			exit(0);
 		}
+		if (strstr(buffer, "The server is shutting down.") != 0) {
+			printf("\n%s\n", buffer);
+			exit(0);
+		}
 		if (strlen(buffer) != 0) {
 			printf("%s\n", buffer);
 		}

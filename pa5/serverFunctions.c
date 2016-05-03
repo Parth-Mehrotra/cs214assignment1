@@ -175,6 +175,7 @@ int destroyThreadList()
 	{
 		threadList->head = temp->next;
 		free(temp);
+		temp = threadList->head;
 	}
 	free(threadList);
 	return 1;

@@ -36,6 +36,7 @@ void sigHandler(int signum)
 	while(temp != NULL && temp->inSession)
 	{
 		write(temp->newsockfd,"The server is shutting down.\n",30);
+		temp = temp->next;
 	}
 	free(threadArgs);
 	pthread_attr_destroy(&threadAttr);
@@ -51,8 +52,8 @@ void sigHandler(int signum)
 	int i;
 	for(i = 0; i < numAccounts; i++)
 	{
-		free(accountList[i]->name);
-		free(accountList[i]);
+		free((*(accountList+i))->name);
+		free(*(accountList+i));
 	}
 	free(accountList);
 	exit(0);

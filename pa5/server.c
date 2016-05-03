@@ -431,6 +431,8 @@ void* communicate(void* args)
 		}
 		if(command == EXIT)
 		{
+			if(inClientSession)
+				thisAcc->isInSession = 0;
 			break;
 		}
 	}

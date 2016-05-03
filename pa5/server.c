@@ -448,6 +448,8 @@ void* communicate(void* args)
 
 void* threadGarbageCollector(void* junk)
 {
+	signal(SIGINT, sigHandler);
+
 	NodePtr temp = threadList->head;
 	NodePtr prev = NULL;
 	while(1)

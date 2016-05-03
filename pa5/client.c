@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
 	// try to build a socket .. if it doesn't work, complain and exit
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
-        printf("ERROR creating socket");
+        printf("ERROR creating socket\n");
 		exit(1);
 	}
 
@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
 	// try to connect to the server using our blank socket and the address info struct 
 	//   if it doesn't work, complain and exit
     if (connect(sockfd,(struct sockaddr *)&serverAddressInfo,sizeof(serverAddressInfo)) < 0) {
-        printf("ERROR connecting");
+        printf("ERROR connecting\n");
 		exit(1);
 	}	
 

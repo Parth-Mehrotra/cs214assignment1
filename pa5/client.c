@@ -92,6 +92,8 @@ int main(int argc, char *argv[]) {
 			printf("Retrying\n");
 			sleep(3);
 		}	
+		else
+			break;
 	}
 
 	pthread_t thread0;

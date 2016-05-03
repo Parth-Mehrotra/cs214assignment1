@@ -15,7 +15,9 @@ void *read_from_server() {
 	char buffer[256];
 
 	while(1) {
-		int n = read(sockfd,buffer,255);
+		int n = read(sockfd,buffer,255); if (strcmp(buffer, "This client session has ended.")) {
+			exit(0);
+		}
 		if (strlen(buffer) != 0) {
 			printf("%s\n", buffer);
 		}
@@ -42,7 +44,7 @@ int main(int argc, char *argv[]) {
     
     if (argc < 3) {
        fprintf(stderr,"usage %s hostname port\n", argv[0]);
-       exit(0);
+       exit(1);
     }
 
 	// convert the text representation of the port number given by the user to an int
@@ -52,14 +54,14 @@ int main(int argc, char *argv[]) {
     serverIPAddress = gethostbyname(argv[1]);
     if (serverIPAddress == NULL) {
         fprintf(stderr,"ERROR, no such host\n");
-        exit(0);
+        exit(1);
     }
 				
 	// try to build a socket .. if it doesn't work, complain and exit
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
         printf("ERROR creating socket");
-		return 0;
+		exit(1);
 	}
 
 	// zero out the socket address info struct .. always initialize!
@@ -83,7 +85,7 @@ int main(int argc, char *argv[]) {
 	//   if it doesn't work, complain and exit
     if (connect(sockfd,(struct sockaddr *)&serverAddressInfo,sizeof(serverAddressInfo)) < 0) {
         printf("ERROR connecting");
-		return 0;
+		exit(1);
 	}	
 
 	pthread_t thread0;
@@ -105,8 +107,10 @@ int main(int argc, char *argv[]) {
 		// if we couldn't write to the server for some reason, complain and exit
 		if (n < 0) {
 			 printf("ERROR writing to socket");
-			 return 0;
+			exit(1);
 		}
+
+		sleep(2);
 		
 		// sent message to the server, zero the buffer back out to read the server's response
 		bzero(buffer,256);

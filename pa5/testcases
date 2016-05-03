@@ -28,65 +28,65 @@
 < This client session has ended.
 
 ...
-Please enter the message: finish
-This client session has been closed.
+> Please enter the message: finish
+< This client session has been closed.
 
-Please enter the message: open 12
-Your account has been created successfully.
+> Please enter the message: open 12
+< Your account has been created successfully.
 
-Please enter the message: finish
-This client session has been closed.
+> Please enter the message: finish
+< This client session has been closed.
 
-Please enter the message: open 13
-Your account has been created successfully.
+> Please enter the message: open 13
+< Your account has been created successfully.
 
-Please enter the message: finish
-This client session has been closed.
+> Please enter the message: finish
+< This client session has been closed.
 
-Please enter the message: open 14
-Your account has been created successfully.
+> Please enter the message: open 14
+< Your account has been created successfully.
 
-Please enter the message: finish
-This client session has been closed.
+> Please enter the message: finish
+< This client session has been closed.
 
-Please enter the message: open 15
-Your account has been created successfully.
+> Please enter the message: open 15
+< Your account has been created successfully.
 
-Please enter the message: finish 
-This client session has been closed.
+> Please enter the message: finish 
+< This client session has been closed.
 
-Please enter the message: open 16
-Your account has been created successfully.
+> Please enter the message: open 16
+< Your account has been created successfully.
 
-Please enter the message: finish
-This client session has been closed.
+> Please enter the message: finish
+< This client session has been closed.
 
-Please enter the message: open 17
-Your account has been created successfully.
+> Please enter the message: open 17
+< Your account has been created successfully.
 
-Please enter the message: finish
-This client session has been closed.
+> Please enter the message: finish
+< This client session has been closed.
 
-Please enter the message: open 18
-Your account has been created successfully.
+> Please enter the message: open 18
+< Your account has been created successfully.
 
-Please enter the message: finish
-This client session has been closed.
+> Please enter the message: finish
+< This client session has been closed.
 
-Please enter the message: open 19
-Your account has been created successfully.
+> Please enter the message: open 19
+< Your account has been created successfully.
 
-Please enter the message: finish
-This client session has been closed.
+> Please enter the message: finish
+< This client session has been closed.
 
-Please enter the message: open 20
-Your account has been created successfully.
+> Please enter the message: open 20
+< Your account has been created successfully.
 
-Please enter the message: finish
-This client session has been closed.
+> Please enter the message: finish
+< This client session has been closed.
 
-Please enter the message: open 21
-There are already 20 accounts initialized in the bank.
+> Please enter the message: open 21
+< There are already 20 accounts initialized in the bank.
 
 > Please enter the message: 
 

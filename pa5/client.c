@@ -15,7 +15,9 @@ void *read_from_server() {
 	char buffer[256];
 
 	while(1) {
-		int n = read(sockfd,buffer,255); if (strcmp(buffer, "This client session has ended.")) {
+		int n = read(sockfd,buffer,255); 
+		if (strstr(buffer, "This client session has ended.") != 0) {
+			printf("%s\n", buffer);
 			exit(0);
 		}
 		if (strlen(buffer) != 0) {
@@ -28,7 +30,7 @@ void *read_from_server() {
 int main(int argc, char *argv[]) {
 
 	// server port to connect to
-	int portno = -1;
+	int portno = 8989;
 
 	// utility variable - for monitoring reading/writing from/to the socket
 	int n = -1;
@@ -42,14 +44,11 @@ int main(int argc, char *argv[]) {
 	// Super-special secret C struct that holds info about a machine's address
     struct hostent *serverIPAddress;
     
-    if (argc < 3) {
-       fprintf(stderr,"usage %s hostname port\n", argv[0]);
+    if (argc < 2) {
+       fprintf(stderr,"usage %s hostname\n", argv[0]);
        exit(1);
     }
 
-	// convert the text representation of the port number given by the user to an int
-	portno = atoi(argv[2]);
-	
 	// look up the IP address that matches up with the name given
     serverIPAddress = gethostbyname(argv[1]);
     if (serverIPAddress == NULL) {
@@ -106,12 +105,11 @@ int main(int argc, char *argv[]) {
 		
 		// if we couldn't write to the server for some reason, complain and exit
 		if (n < 0) {
-			 printf("ERROR writing to socket");
+			printf("ERROR writing to socket");
 			exit(1);
 		}
-
 		sleep(2);
-		
+
 		// sent message to the server, zero the buffer back out to read the server's response
 		bzero(buffer,256);
 	}

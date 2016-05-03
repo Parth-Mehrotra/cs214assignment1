@@ -1,0 +1,92 @@
+./server, ./client localhost
+
+> Please enter the message: open p2
+< Your account has been created successfully.
+
+> Please enter the message: open p2
+< A customer session is already open on this client.
+
+> Please enter the message: balance
+< Your current balance is: 0.00.
+
+> Please enter the message: credit 3
+< Your balance has been successfully changed.
+
+> balPlease enter the message: ance 
+< Your current balance is: 3.00.
+
+> Please enter the message: debit 2
+< Your balance has been successfully changed.
+
+> Please enter the message: balance
+< Your current balance is: 1.00.
+
+> Please enter the message: finish
+< This client session has been closed.
+
+> Please enter the message: exit
+< This client session has ended.
+
+...
+Please enter the message: finish
+This client session has been closed.
+
+Please enter the message: open 12
+Your account has been created successfully.
+
+Please enter the message: finish
+This client session has been closed.
+
+Please enter the message: open 13
+Your account has been created successfully.
+
+Please enter the message: finish
+This client session has been closed.
+
+Please enter the message: open 14
+Your account has been created successfully.
+
+Please enter the message: finish
+This client session has been closed.
+
+Please enter the message: open 15
+Your account has been created successfully.
+
+Please enter the message: finish 
+This client session has been closed.
+
+Please enter the message: open 16
+Your account has been created successfully.
+
+Please enter the message: finish
+This client session has been closed.
+
+Please enter the message: open 17
+Your account has been created successfully.
+
+Please enter the message: finish
+This client session has been closed.
+
+Please enter the message: open 18
+Your account has been created successfully.
+
+Please enter the message: finish
+This client session has been closed.
+
+Please enter the message: open 19
+Your account has been created successfully.
+
+Please enter the message: finish
+This client session has been closed.
+
+Please enter the message: open 20
+Your account has been created successfully.
+
+Please enter the message: finish
+This client session has been closed.
+
+Please enter the message: open 21
+There are already 20 accounts initialized in the bank.
+
+> Please enter the message: 
+

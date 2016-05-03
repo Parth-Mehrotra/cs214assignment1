@@ -1,0 +1,13 @@
+# Test plan
+
+1. Open an account
+2. try to open the same account
+3. check balance
+4. debit 
+5. check balance 
+6. credit
+7. check balance 
+8. finish
+9. open more than 20 accounts
+10. exit
+
